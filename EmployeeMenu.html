@@ -23,6 +23,7 @@
     <v-app>
       <v-container class="d-flex flex-column align-center justify-center" style="height: 100vh;">
         <v-btn 
+          @click="stockCheck"
           class="mb-3" 
           color="#d1d1d1" 
           style="width: 240px; font-weight: bold; font-size: 18px; border: 1px solid black;"
@@ -30,6 +31,7 @@
           在庫管理
         </v-btn>
         <v-btn 
+          @click="itemRegister"
           class="mb-3" 
           color="#d1d1d1" 
           style="width: 240px; font-weight: bold; font-size: 18px; border: 1px solid black;"
@@ -37,6 +39,7 @@
           商品登録
         </v-btn>
         <v-btn 
+          @click="orderCheck"
           class="mb-3" 
           color="#d1d1d1" 
           style="width: 240px; font-weight: bold; font-size: 18px; border: 1px solid black;"
