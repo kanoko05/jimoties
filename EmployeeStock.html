@@ -61,16 +61,16 @@
 
               <!-- 編集フォーム -->
               <v-card-actions>
-                <v-btn color="primary" @click="startEditing(item)">編集</v-btn>
-                <v-btn color="red" @click="deleteItem(item.Item_ID)">削除</v-btn>
+                <v-btn color="grey" @click="startEditing(item)">編集</v-btn>
+                <v-btn color="grey" @click="deleteItem(item.Item_ID)">削除</v-btn>
               </v-card-actions>
 
               <!-- 編集モード -->
               <v-form v-if="editingItem && editingItem.Item_ID === item.Item_ID" @submit.prevent="saveChanges">
                 <v-text-field v-model="editingItem.Item_price" label="価格" outlined type="number"></v-text-field>
                 <v-text-field v-model="editingItem.Item_stock" label="在庫数" outlined type="number"></v-text-field>
-                <v-btn type="submit" color="green">保存</v-btn>
-                <v-btn color="grey" @click="cancelEditing">キャンセル</v-btn>
+                <v-btn class="editer" type="grey" color="grey">保存</v-btn>
+                <v-btn class="editer" color="grey" @click="cancelEditing">キャンセル</v-btn>
               </v-form>
             </v-card>
 
@@ -103,6 +103,10 @@
 
     .search-field {
       margin-bottom: 20px;
+    }
+
+    .editer{
+      margin: 10px 5px;
     }
   </style>
 
