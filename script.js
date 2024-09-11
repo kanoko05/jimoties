@@ -34,6 +34,13 @@ new Vue({
       addToCart(item) {
         // カートに入れる処理
         console.log('カートに入れる:', item);
+      },
+
+      navigateToSign() {
+        // ログイン画面に戻る処理
+        window.location.href = 'EmployeeLogin.html';
+        //window.location.href = 'https://codepen.io/minakichi552/pen/XWLZGrJ?editors=1010'; // ログイン画面のURLに変更
       }
     }
+
   });
