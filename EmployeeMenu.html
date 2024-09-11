@@ -21,6 +21,19 @@
 <body>
   <div id="app">
     <v-app>
+      <v-container>
+        <v-row>
+          <v-col class="d-flex justify-end">
+            <v-btn 
+              @click="logout"
+              class="mb-3" 
+              color="#d1d1d1" 
+              style="width: 120px; font-weight: bold; font-size: 18px; border: 1px solid black;">
+              ログアウト
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
       <v-container class="d-flex flex-column align-center justify-center" style="height: 100vh;">
         <v-btn 
           @click="stockCheck"
