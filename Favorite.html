@@ -32,8 +32,7 @@
         <div class="header-right">
           <!-- ホームに戻るボタンの追加 -->
           <v-btn text color="#7b9e7a" @click="goHome">ホーム</v-btn>
-          <v-btn text color="#7b9e7a" @click="goLogin">ログイン</v-btn>
-          <v-btn text color="#7b9e7a" @click="goRegister">新規登録</v-btn>
+          <v-btn @click="logout" text color="#7b9e7a">ログアウト</v-btn>
         </div>
       </div>
       <!-- 題名バー -->
@@ -43,8 +42,14 @@
       <br><br>
       <!-- メインコンテンツ -->
       <v-main>
-        <v-container class="v-container-main" style="background-color: white;">
+        <!-- ローディングインジケーター -->
+        <v-container v-if="isLoading" class="text-center">
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </v-container>
+        <!-- お気に入りリストの表示 -->
+        <v-container v-else class="v-container-main" style="background-color: white;">
           <v-data-table
+            :key="tableKey"
             :headers="headers"
             :items="desserts"
             :items-per-page="itemsPerPage"
@@ -85,7 +90,7 @@
           <v-btn class="custom-back-btn" style="background-color: red; color: white; margin-right: 10px;">
             戻る
           </v-btn>
-          <v-btn class="custom-purchase-btn" style="background-color: #7b9e7a; color: white;"　@click="confirmAdd">
+          <v-btn class="custom-purchase-btn" style="background-color: #7b9e7a; color: white;" @click="confirmAdd">
             カートに追加
           </v-btn>
         </v-container>
@@ -288,8 +293,10 @@
           itemsPerPage: 10,
           desserts: [], // 初期値は空の配列
           selectedItems: [], // 選択されたアイテムの配列
-          userID: 1, // 表示したいUser_ID
-          itemNUM: 1
+          userID: seesionStorage.getItem('user_ID'), // 表示したいUser_ID
+          itemNUM: 1,
+          isLoading: true, // ローディング状態を追加
+          tableKey: 0 // 再描画用のkeyを追加
         };
       },
 
@@ -300,7 +307,7 @@
       methods: {
         async fetchfavorite() {
           console.log("データ取得開始：");
-
+          this.isLoading = true; // ローディング開始
           const param = {
             User_ID: this.userID
           };
@@ -339,6 +346,9 @@
             }
           } catch (error) {
             console.error('データの取得に失敗しました:', error);
+          } finally {
+            this.isLoading = false; // ローディング終了
+            this.tableKey += 1; // 強制的にテーブルを再描画
           }
         },
 
@@ -461,18 +471,16 @@
 
         adminLogin() {
           // 管理者ログインのロジックをここに追加
+          window.location.href = `EmployeeLogin.html`;
         },
 
         goHome() {
           window.location.href = 'index.html';
         },
 
-        goLogin() {
+        logout() {
           window.location.href = 'UserLogin.html';
-        },
-
-        goRegister(){
-          window.location.href = 'UserLogin.html#'
+          sessionStorage.removeItem('user_ID');
         }
       }
     });
