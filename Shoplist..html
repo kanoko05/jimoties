@@ -302,21 +302,30 @@
           desserts: [], // 初期値は空の配列
           selectedItems: [], // 選択されたアイテムの配列
           totalPrice: 0, // 合計金額を保持する変数
-          userID: 3, // 表示したいUser_ID
+          userID: 1, // 表示したいUser_ID
         };
       },
 
       mounted() {
         // URLパラメータからユーザーIDを取得
         const urlParams = new URLSearchParams(window.location.search);
-        this.userID = urlParams.get('userID') || 3; // パラメータがない場合はデフォルト値1を使用
+        const urlUserID = urlParams.get('userID');
+        
+        // URLパラメータがあればそのIDを使用し、なければデフォルトで1を使用
+        this.userID = urlUserID ? parseInt(urlUserID, 10) : 1;
+        console.log('取得したユーザーID:', this.userID);
+        
+        // ユーザーIDが適切か確認（デフォルト値が適用されているか確認）
+        if (!urlUserID) {
+            console.warn('URLパラメータが見つからないため、デフォルトのユーザーIDが使用されます。');
+        }
+
         this.fetchshoplist();
       },
 
       methods: {
         async fetchshoplist() {
-          console.log("データ取得開始：");
-
+          console.log("データ取得開始：", "User_ID:", this.userID); // ここでログを追加
           const param = {
             User_ID: this.userID
           };
