@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>都道府県検索</title>
+  <title>都道府県最新</title>
   
 
 </head>
@@ -254,7 +254,8 @@
         },
         methods: {
             showRegion(region) {
-                alert(region + 'の名産品を表示します');
+                // 名産品を取得して表示する処理を追加
+                this.showProducts(region);
             },
             showPrefectures(region, prefectures) {
                 this.currentPrefectures = prefectures;
