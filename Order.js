@@ -114,7 +114,7 @@ new Vue({
     },
     
     back(){
-      window.location.href = `Shoplist.html`
+      window.location.href = `Shoplist..html`
     },
     
     adminLogin() {
