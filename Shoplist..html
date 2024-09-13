@@ -302,7 +302,7 @@
           desserts: [], // 初期値は空の配列
           selectedItems: [], // 選択されたアイテムの配列
           totalPrice: 0, // 合計金額を保持する変数
-          userID: 1, // 表示したいUser_ID
+          userID: 1, // 表示したいUser_ID（デフォルト）
         };
       },
 
@@ -327,52 +327,51 @@
         async fetchshoplist() {
           console.log("データ取得開始：", "User_ID:", this.userID); // ここでログを追加
           const param = {
-            User_ID: this.userID
+              User_ID: this.userID
           };
 
           try {
-            console.log(`購入履歴を取得中... User_ID:`, param);
-            const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param, {
-              headers: {
-                'Cache-Control': 'no-cache' // キャッシュを無効化
-              }
-            });
-
-            if (response.data && response.data.ShoplistList) {
-              this.desserts = response.data.ShoplistList; // 取得したデータを直接セット
-              console.log('取得したデータ:', this.desserts);
-
-              // 商品情報を追加で取得する
-              const fetchItemData = this.desserts.map(async item => {
-                const param2 = { Item_ID: item.Item_ID };
-
-                try {
-                  const response2 = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemId', param2);
-                  if (response2.data && response2.data.ItemTableList && response2.data.ItemTableList.length > 0) {
-                    const itemData = response2.data.ItemTableList[0];
-                    item.Item_name = itemData.Item_name || "不明";
-                    item.Item_prefecture = itemData.Item_prefecture || "不明";
-                    item.Item_price = itemData.Item_price || 0;
-                    item.Item_image = itemData.Item_image || "https://via.placeholder.com/100";
-
-                    console.log(`Item_ID: ${item.Item_ID} のデータ:`, item);
+              console.log(`購入履歴を取得中... User_ID:`, param);
+              const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param, {
+                  headers: {
+                      'Cache-Control': 'no-cache' // キャッシュを無効化
                   }
-                } catch (error) {
-                  console.error(`Item_ID ${item.Item_ID} のデータ取得に失敗しました:`, error);
-                }
               });
 
-              // すべての非同期操作が完了するのを待ちます
-              await Promise.all(fetchItemData);
+              if (response.data && response.data.ShoplistList) {
+                  this.desserts = response.data.ShoplistList; // 取得したデータを直接セット
+                  console.log('取得したデータ:', this.desserts);
+                  // 商品情報を追加で取得する
+                  const fetchItemData = this.desserts.map(async item => {
+                      const param2 = { Item_ID: item.Item_ID };
 
-              // 合計金額を計算
-              this.calculateTotalPrice();
-              console.log('最終的なデータ:', this.desserts);
-            } else {
-              console.error('レスポンスの形式が予想外です:', response);
-            }
+                      try {
+                          const response2 = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemId', param2);
+                          if (response2.data && response2.data.ItemTableList && response2.data.ItemTableList.length > 0) {
+                              const itemData = response2.data.ItemTableList[0];
+                              item.Item_name = itemData.Item_name || "不明";
+                              item.Item_prefecture = itemData.Item_prefecture || "不明";
+                              item.Item_price = itemData.Item_price || 0;
+                              item.Item_image = itemData.Item_image || "https://via.placeholder.com/100";
+
+                              console.log(`Item_ID: ${item.Item_ID} のデータ:`, item);
+                          }
+                      } catch (error) {
+                          console.error(`Item_ID ${item.Item_ID} のデータ取得に失敗しました:`, error);
+                      }
+                  });
+
+                  // すべての非同期操作が完了するのを待ちます
+                  await Promise.all(fetchItemData);
+
+                  // 合計金額を計算
+                  this.calculateTotalPrice();
+                  console.log('最終的なデータ:', this.desserts);
+              } else {
+                  console.error('レスポンスの形式が予想外です:', response);
+              }
           } catch (error) {
-            console.error('データの取得に失敗しました:', error);
+              console.error('データの取得に失敗しました:', error);
           }
         },
 
