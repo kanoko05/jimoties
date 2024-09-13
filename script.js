@@ -37,7 +37,6 @@ new Vue({
     if (storedUserId) {
       // 保存されていたユーザーIDを変数にセット
       this.userId = storedUserId;
-      this.showLocalSpecialty = true;
 
       // データを取得するメソッドを呼び出す
       this.fetchUserIdAndPrefecture();

@@ -244,7 +244,7 @@
           </v-carousel>
           
           <br><br>
-          <div v-if="showLocalSpecialty">
+          <template v-if="userId">
   <div class="product-title">あなたの地元の名産</div>
 <div class="scroll-container">
   <div class="scroll-item" v-for="(item, index) in scrollItems" :key="index" @click="itemClicked(item)">
@@ -255,7 +255,7 @@
     </div>
   </div>
 </div>
-</div>
+</template>
 
           
           <br><br>
