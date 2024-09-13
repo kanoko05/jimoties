@@ -73,7 +73,7 @@ new Vue({
       try {
         console.log("ユーザID:", this.userId);
         // API エンドポイントにリクエストを送信
-        const response = await axios.post(`https://m3h-minaki-jimoties.azurewebsites.net/api/ExtractPrefectureByUserId?User_ID=${userIdAsNumber}`);
+        const response = await axios.post(`https://m3h-minaki-jimoties.azurewebsites.net/api/ExtractPrefectureByUserId?User_ID=${this.userId}`);
 
         console.log("都道府県取得", response.data);
         // レスポンスから都道府県を取得
