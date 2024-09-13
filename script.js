@@ -130,7 +130,7 @@ new Vue({
     },
 
     cart() {
-      window.location.href = `Shoplist.html`;
+      window.location.href = `Shoplist..html`;
     },
 
     searchkey() {
