@@ -78,6 +78,12 @@
         </v-row>
       </v-container>
     </v-app>
+
+    <!-- スナックバー -->
+    <v-snackbar v-model="snackbar.visible" :timeout="snackbar.timeout" color="success">
+      {{ snackbar.message }}
+      <v-btn color="white" text @click="snackbar.visible = false">閉じる</v-btn>
+    </v-snackbar>
   </div>
 
   <style>
@@ -118,7 +124,12 @@
         return {
           searchItemId: '', // 検索するItem_ID
           searchResults: [], // 検索結果を格納する配列
-          editingItem: null // 編集中の商品
+          editingItem: null, // 編集中の商品
+          snackbar: {
+            visible: false,
+            message: '',
+            timeout: 3000
+          } // スナックバーの設定
         };
       },
       methods: {
@@ -153,11 +164,11 @@
           try {
             console.log('編集保存開始: ', this.editingItem);
             // ここでAPIを呼び出して編集内容を保存します
-            const response = await axios.post('https://m3h-nishizawa-jimoties.azurewebsites.net/api/UpdateItem', this.editingItem);
+            const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItem', this.editingItem);
 
             console.log('編集保存成功: ', response.data);
             this.searchResults = this.searchResults.map(item =>
-              item.Item_ID === this.editingItem.Item_ID ? this.editingItem : item
+              item.Item_ID === this.editingItem.item_ID ? this.editingItem : item
             );
             this.editingItem = null; // 編集モードを終了
           } catch (error) {
@@ -172,10 +183,12 @@
           try {
             console.log('削除開始: ', itemId);
             // ここでAPIを呼び出して商品を削除します
-            const response = await axios.post('https://m3h-nishizawa-jimoties.azurewebsites.net/api/DeleteItem', { Item_ID: itemId });
+            const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItem', { item_ID: itemId });
 
             console.log('削除成功: ', response.data);
-            this.searchResults = this.searchResults.filter(item => item.Item_ID !== itemId);
+            this.searchResults = this.searchResults.filter(item => item.item_ID !== itemId);
+            this.snackbar.message = '削除が成功しました。'; // メッセージを設定
+            this.snackbar.visible = true; // スナックバーを表示
           } catch (error) {
             console.error('削除に失敗しました:', error);
           }
