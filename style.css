@@ -1,47 +1,15 @@
-.custom-app-bar {
-    max-height: 50px !important;
-    padding: 0 16px;
-  }
-  .v-toolbar-title {
-    line-height: 30px !important;
-  }
+.scroll-item {
+  cursor: pointer;
+  /* 必要に応じて他のスタイルを追加 */
+}
+.scroll-item:hover {
+  /* ホバー時のスタイルを追加することもできます */
+  background-color: #f0f0f0; /* 例: ホバー時に背景色を変更 */
+}
 
-  .v-data-table {
-    border-collapse: collapse;
-  }
-
-  .v-data-table,
-  .v-data-table th,
-  .v-data-table td {
-    border: 1px solid #cccccc;
-    text-align: center !important; /* データの中央揃え */
-    margin:auto !important;
-  }
-
-  .v-data-table th {
-    background-color: gray;
-    text-align: center !important; /* ヘッダーの中央揃え */
-    margin:auto !important;
-  }
-
-  .v-data-table img {
-    max-width: 100px;
-    max-height: 100px;
-    object-fit: cover;
-  }
-
-  .action-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* 操作ボタン列のボーダーを消す */
-  .v-data-table td:nth-child(5) {
-    border: none !important;
-  }
-
-  /* 操作ボタン列のヘッダーを非表示にする */
-  .v-data-table th:nth-child(5) {
-    display: none !important;
-  }
+.center-green-text {
+  display: flex; /* フレックスボックスを使って中央寄せ */
+  justify-content: center; /* 水平方向に中央寄せ */
+  align-items: center; /* 垂直方向に中央寄せ */
+  color: #7b9e7a !important; 
+}
