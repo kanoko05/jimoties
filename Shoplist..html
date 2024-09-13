@@ -307,6 +307,9 @@
       },
 
       mounted() {
+        // URLパラメータからユーザーIDを取得
+        const urlParams = new URLSearchParams(window.location.search);
+        this.userID = urlParams.get('userID') || 1; // パラメータがない場合はデフォルト値1を使用
         this.fetchshoplist();
       },
 
