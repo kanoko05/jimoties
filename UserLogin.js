@@ -45,7 +45,7 @@ function login() {
       sessionStorage.setItem('user_ID', data.users[0].id);
 
       // 直接マイページへリダイレクト
-      window.location.href = "mypage.html";
+      window.location.href = "index.html";
     } else {
       showMessage("メールアドレスまたはパスワードが間違っています。", "#f44336");
     }
