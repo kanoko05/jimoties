@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>キーワード検索最新</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ジモティーズ - キーワード検索</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/vuetify@2.7.1/dist/vuetify.min.css" rel="stylesheet">
+  <style>
+    .header, .footer {
+      background-color: #f5f5f5;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+    .header-title {
+      font-family: 'serif';
+      font-size: 24px;
+      font-weight: bold;
+      color: #7b9e7a;
+      display: flex;
+      align-items: center;
+    }
+    .header-title .mdi-icon {
+      margin-right: 10px;
+      font-size: 40px;
+      color: #7b9e7a;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+    }
+    .header-right .v-btn {
+      margin-left: 10px;
+      color: #7b9e7a;
+    }
+    .navbar {
+      margin-top: 10px;
+    }
+    .navbar .v-btn {
+      color: #7b9e7a;
+      font-weight: bold;
+    }
+    .icon-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 5px;
+      padding: 4px;
+      color: #7b9e7a;
+      text-transform: none;
+      min-width: 50px;
+      opacity: 0.8;
+    }
+    .icon-button v-icon {
+      font-size: 26px;
+      margin-bottom: 2px;
+    }
+    .icon-button span {
+      font-size: 14px;
+    }
+    .search-container {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background-color: #fff;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .search-field {
+      flex: 1;
+      margin-right: 10px;
+    }
+    .search-btn {
+      background-color: #7b9e7a !important;
+      color: white !important;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-weight: bold;
+      text-transform: none;
+    }
+    .footer {
+      background-color: #e0f0e6;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #7b9e7a;
+      font-size: 14px;
+    }
+    .admin-login-btn {
+      color: #7b9e7a;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .product-list {
+      margin-top: 180px;
+    }
+    .product-card {
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* 拡大効果を追加 */
+    }
+    .product-card:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05); /* ホバー時に少し拡大 */
+    }
+    .product-card img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    .product-card .v-card__title,
+    .product-card .v-card__subtitle,
+    .product-card .v-card__text p {
+      color: #7b9e7a !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <div class="header">
+        <div class="header-left">
+          <div class="header-title">
+            <v-icon class="mdi-icon">mdi-home-city-outline</v-icon>
+            ジモティーズ
+          </div>
+        </div>
+        <div class="header-right">
+          <v-btn text color="#7b9e7a" @click="goHome">ホーム</v-btn>
+          <v-btn text color="#7b9e7a" @click="goLogin">ログイン</v-btn>
+          <v-btn text color="#7b9e7a" @click="goLogin">新規登録</v-btn>
+        </div>
+      </div>
+      <v-toolbar flat class="navbar">
+        <v-spacer></v-spacer>
+        <v-btn class="icon-button" flat @click="goMypage">
+          <v-icon>mdi-account</v-icon>
+          <span>マイページ</span>
+        </v-btn>
+        <v-btn class="icon-button" flat @click="goFavorite">
+          <v-icon>mdi-heart</v-icon>
+          <span>お気に入り</span>
+        </v-btn>
+        <v-btn class="icon-button" flat @click="goCart">
+          <v-icon>mdi-cart</v-icon>
+          <span>カート</span>
+        </v-btn>
+      </v-toolbar>
+
+      <v-main>
+        <v-container>
+          <!-- 検索ボックス -->
+          <div class="search-container">
+            <v-text-field
+              v-model="keyword"
+              placeholder="名産品のキーワードから探す"
+              hide-details
+              solo
+              dense
+              flat
+              class="search-field"
+            ></v-text-field>
+            <v-btn class="search-btn" @click="searchItems">検索</v-btn>
+          </div>
+
+          <!-- 検索結果 -->
+          <div class="product-list">
+            <v-row>
+              <v-col v-for="product in products" :key="product.Item_ID" cols="12" sm="6" md="4">
+                <v-card class="product-card" @click="goToProductDetail(product.Item_ID)">
+                  <v-img :src="product.Item_image" height="150"></v-img>
+                  <v-card-title>{{ product.Item_name }}</v-card-title>
+                  <v-card-subtitle>産地: {{ product.Item_prefecture }}</v-card-subtitle>
+                  <v-card-text>
+                    <p>カテゴリー: {{ product.Item_category }}</p>
+                    <p>価格: {{ product.Item_price }}円</p>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </div>
+          <div v-if="message">{{ message }}</div>
+        </v-container>
+      </v-main>
+
+      <v-footer class="footer">
+        &copy; 2024 ジモティーズ. All rights reserved.
+        <v-btn text class="admin-login-btn" @click="goAdminLogin">管理者はこちらから</v-btn>
+      </v-footer>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data() {
+        return {
+          keyword: '',
+          products: [],
+          message: ''
+        };
+      },
+      methods: {
+        goHome() {
+          window.location.href = 'index.html';
+        },
+        goLogin() {
+          window.location.href = 'UserLogin.html';
+        },
+        goMypage() {
+          window.location.href = 'Mypage.html';
+        },
+        goFavorite() {
+          window.location.href = 'Favorite.html';
+        },
+        goCart() {
+          window.location.href = 'Shoplist.html';
+        },
+        goToProductDetail(itemId) {
+          window.location.href = `ItemDetail.html?id=${itemId}`;
+        },
+        goAdminLogin() {
+          window.location.href = 'EmployeeLogin.html';
+        },
+        async searchItems() {
+          try {
+            const response = await axios.get('https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName', {
+              params: { Item_name: this.keyword }
+            });
+            if (response.data && response.data.ItemTableList && response.data.ItemTableList.length > 0) {
+              this.products = response.data.ItemTableList;
+              this.message = '';
+            } else {
+              this.message = '一致する商品がありません';
+              this.products = [];
+            }
+          } catch (error) {
+            console.error('検索エラー:', error);
+            this.message = 'エラーが発生しました。再度お試しください。';
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
