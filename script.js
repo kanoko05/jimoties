@@ -37,6 +37,7 @@ new Vue({
     if (storedUserId) {
       // 保存されていたユーザーIDを変数にセット
       this.userId = storedUserId;
+      this.showLocalSpecialty = true;
 
       // データを取得するメソッドを呼び出す
       this.fetchUserIdAndPrefecture();
@@ -111,7 +112,7 @@ new Vue({
     //ここからページ遷移先設定
     logout() {
       sessionStorage.removeItem('user_ID');
-      window.location.href = `https://codepen.io/minakichi552/pen/XWLGwmB?editors=1010`;
+      window.location.href = `UserLogin.html`;
     },
 
     login() {
