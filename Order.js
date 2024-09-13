@@ -3,7 +3,7 @@ new Vue({
   vuetify: new Vuetify(),
   data() {
     return {
-      userID: 1, // 表示したいUser_ID
+      userID: sessionStorage.getItem('user_ID'), // 表示したいUser_ID
       datalist: [],
       datalist2: [],
       datalist3: [],
