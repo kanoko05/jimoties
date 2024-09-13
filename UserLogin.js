@@ -42,7 +42,7 @@ function login() {
   .then(data => {
     if (data.users && data.users.length > 0) {
       // ローカルストレージにログイン情報を保存
-      sessionStorage.setItem('user_ID', data.users[0].id);
+      sessionStorage.setItem('user_ID', data.users[0].user_ID);
 
       // 直接マイページへリダイレクト
       window.location.href = "index.html";
