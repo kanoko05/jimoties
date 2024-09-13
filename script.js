@@ -71,8 +71,7 @@ new Vue({
 
     async fetchUserIdAndPrefecture() {
       try {
-        const userIdAsNumber = Number(this.userId);
-        console.log("ユーザID:", userIdAsNumber);
+        console.log("ユーザID:", this.userId);
         // API エンドポイントにリクエストを送信
         const response = await axios.post(`https://m3h-minaki-jimoties.azurewebsites.net/api/ExtractPrefectureByUserId?User_ID=${userIdAsNumber}`);
 
