@@ -16,7 +16,7 @@ new Vue({
     },
     goToCart() {
       // カートページに遷移
-      window.location.href = 'Shoplist.html';
+      window.location.href = 'Shoplist..html';
     },
     goToFavorites() {
       // お気に入りページに遷移
