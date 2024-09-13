@@ -331,7 +331,7 @@
           };
 
           try {
-              console.log(`購入履歴を取得中... User_ID:`, param);
+              console.log(`APIに送信するリクエストパラメータ:`, param); // リクエスト前のログ
               const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param, {
                   headers: {
                       'Cache-Control': 'no-cache' // キャッシュを無効化
@@ -339,8 +339,9 @@
               });
 
               if (response.data && response.data.ShoplistList) {
+                  console.log('APIから返されたデータ:', response.data.ShoplistList); // 返されたデータをログ
                   this.desserts = response.data.ShoplistList; // 取得したデータを直接セット
-                  console.log('取得したデータ:', this.desserts);
+                  
                   // 商品情報を追加で取得する
                   const fetchItemData = this.desserts.map(async item => {
                       const param2 = { Item_ID: item.Item_ID };
