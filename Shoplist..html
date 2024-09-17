@@ -302,47 +302,44 @@
           desserts: [], // 初期値は空の配列
           selectedItems: [], // 選択されたアイテムの配列
           totalPrice: 0, // 合計金額を保持する変数
-          userID: 1, // 表示したいUser_ID（デフォルト）
+          userID: null, // 初期値をnullに設定してデフォルトを持たせない
         };
       },
 
       mounted() {
         // URLパラメータからユーザーIDを取得
         const urlParams = new URLSearchParams(window.location.search);
-        const urlUserID = urlParams.get('userID');
+        const urlUserID = urlParams.get('userID'); // 大文字の 'userID' を使用
         
-        // URLパラメータがあればそのIDを使用し、なければデフォルトで1を使用
-        this.userID = urlUserID ? parseInt(urlUserID, 10) : 1;
-        console.log('取得したユーザーID:', this.userID);
-        
-        // ユーザーIDが適切か確認（デフォルト値が適用されているか確認）
-        if (!urlUserID) {
-            console.warn('URLパラメータが見つからないため、デフォルトのユーザーIDが使用されます。');
+        if (urlUserID) {
+            this.userID = parseInt(urlUserID, 10);
+            console.log('取得したユーザーID:', this.userID);
+            this.fetchshoplist();
+        } else {
+            alert('ユーザーIDが指定されていません。URLにuserIDパラメータを含めてアクセスしてください。');
+            console.error('URLパラメータが見つからないため、ユーザーIDが設定されていません。');
         }
-
-        this.fetchshoplist();
       },
 
       methods: {
         async fetchshoplist() {
-          console.log("データ取得開始：", "User_ID:", this.userID); // ここでログを追加
+          console.log("データ取得開始：", "User_ID:", this.userID);
           const param = {
               User_ID: this.userID
           };
 
           try {
-              console.log(`APIに送信するリクエストパラメータ:`, param); // リクエスト前のログ
+              console.log(`APIに送信するリクエストパラメータ:`, param);
               const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param, {
                   headers: {
-                      'Cache-Control': 'no-cache' // キャッシュを無効化
+                      'Cache-Control': 'no-cache'
                   }
               });
 
               if (response.data && response.data.ShoplistList) {
-                  console.log('APIから返されたデータ:', response.data.ShoplistList); // 返されたデータをログ
-                  this.desserts = response.data.ShoplistList; // 取得したデータを直接セット
+                  console.log('APIから返されたデータ:', response.data.ShoplistList);
+                  this.desserts = response.data.ShoplistList;
                   
-                  // 商品情報を追加で取得する
                   const fetchItemData = this.desserts.map(async item => {
                       const param2 = { Item_ID: item.Item_ID };
 
@@ -362,10 +359,7 @@
                       }
                   });
 
-                  // すべての非同期操作が完了するのを待ちます
                   await Promise.all(fetchItemData);
-
-                  // 合計金額を計算
                   this.calculateTotalPrice();
                   console.log('最終的なデータ:', this.desserts);
               } else {
@@ -392,8 +386,8 @@
           try {
             const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItemShopList', params);
             if (response.status === 200) {
-              item.Item_num = newQuantity; // 数量を更新
-              this.calculateTotalPrice(); // 合計金額の再計算
+              item.Item_num = newQuantity;
+              this.calculateTotalPrice();
             } else {
               alert('数量の更新に失敗しました。もう一度お試しください。');
             }
@@ -414,10 +408,9 @@
         },
 
         deleteSelected() {
-          // 選択されたアイテムを削除
           this.desserts = this.desserts.filter(item => !this.selectedItems.includes(item));
-          this.selectedItems = []; // 選択項目をリセット
-          this.calculateTotalPrice(); // 合計金額を再計算
+          this.selectedItems = [];
+          this.calculateTotalPrice();
         },
 
         updateSelectedItems(item) {
@@ -432,7 +425,6 @@
         },
 
         calculateTotalPrice() {
-          // 合計金額を再計算
           this.totalPrice = this.desserts.reduce((acc, item) => acc + (item.Item_price * item.Item_num), 0);
         },
 
@@ -462,7 +454,7 @@
       },
 
       watch: {
-        desserts: 'calculateTotalPrice' // dessertsが変更されたら合計金額を再計算
+        desserts: 'calculateTotalPrice'
       }
     });
   </script>
