@@ -201,7 +201,7 @@
                 </div>
             </div>
             <div class="header-right">
-                <v-btn text color="#7b9e7a">ホーム</v-btn>
+                <v-btn text color="#7b9e7a" @click="goToHome">ホーム</v-btn>
                 <v-btn text color="#7b9e7a" @click="goToLogin">ログイン・新規登録</v-btn>
             </div>
         </div>
@@ -297,9 +297,12 @@
                 try {
                     // APIに商品IDを使ってリクエスト
                     const response = await axios.get(`https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_ID=${this.item_ID}`);
-                    console.log('API Response:', response.data); // レスポンスを確認
+                    
+                    // レスポンスの確認
+                    console.log('API Response:', response.data); 
 
-                    if (response.data.ItemTableList && response.data.ItemTableList.length > 0) {
+                    // 商品情報の処理
+                    if (response.data && response.data.ItemTableList && response.data.ItemTableList.length > 0) {
                         const itemData = response.data.ItemTableList[0];
                         this.item = {
                             name: itemData.Item_name || '商品名なし',
@@ -310,11 +313,11 @@
                             image: itemData.Item_image || 'https://via.placeholder.com/150'
                         };
                     } else {
-                        console.error('Item data not found.');
+                        console.error('商品データが見つかりません。');
                         Swal.fire('エラー', '商品情報が見つかりません。', 'error');
                     }
                 } catch (error) {
-                    console.error('Error fetching item data:', error);
+                    console.error('商品の取得に失敗しました:', error);
                     Swal.fire('エラー', '商品の取得に失敗しました。', 'error');
                 }
             },
@@ -337,7 +340,7 @@
                     Swal.fire('成功', 'カートに追加されました！', 'success');
                 })
                 .catch(error => {
-                    console.error('Error adding item to cart:', error);
+                    console.error('カートに追加できませんでした:', error);
                     Swal.fire('エラー', 'カートに追加できませんでした。', 'error');
                 });
             },
@@ -365,7 +368,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error adding item to favorite:', error);
+                    console.error('お気に入りに追加できませんでした:', error);
                     Swal.fire('エラー', '通信エラーが発生しました。', 'error');
                 });
             },
