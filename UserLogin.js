@@ -73,7 +73,7 @@ function showMessage(message, backgroundColor) {
 }
 
 // アカウント作成機能
-function register() {
+async function register() {
   const user_name = document.getElementById("user_name").value;
   const user_password = document.getElementById("user_password").value;
   const mail = document.getElementById("mail").value;
