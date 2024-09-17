@@ -57,7 +57,7 @@ new Vue({
       console.log("商品引き渡し", productName);
 
       // 商品名をクエリパラメータとしてURLに追加して遷移
-      window.location.href = `https://codepen.io/minakichi552/pen/ExBMzXr?productName=${productName}`;
+      window.location.href = `ItemDetail.html?productName=${productName}`;
     },
     itemClicked(item) {
       console.log("商品引き渡し", item.Item_name);
