@@ -395,7 +395,7 @@
                 // 削除に成功した場合の処理
                 this.desserts = this.desserts.filter(dessert => dessert.Item_ID !== item.Item_ID);
                 this.desserts = [...this.desserts]; // 画面を更新するために再代入
-                alert(`${item.Item_name}が正常に削除されました。`);
+                alert(`${item.Item_name}が削除されました。`);
               } else {
                 console.error(`削除APIは成功しましたが、ステータスが'${result.status}'となっています。`);
                 alert('削除に失敗しました。');
