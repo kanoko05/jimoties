@@ -90,8 +90,8 @@ new Vue({
     console.error('ユーザー情報の取得に失敗しました:', error);
   }
 },
+goBack() {
+  window.location.href = 'EmployeeMenu.html';
+}
 
-
-   
-  }
 });

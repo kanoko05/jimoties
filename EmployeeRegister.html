@@ -82,6 +82,15 @@
 <body>
   <div id="app">
     <v-app>
+      <v-container style="position: absolute; left: 10px; padding: 0; top:10px;"></v-container>
+        <v-btn 
+          color="#d1d1d1" 
+          style="width: 70px; font-weight: bold; font-size: 12px; border: 1px solid black; margin: 0;"
+          @click="goBack"
+        >
+          戻る
+        </v-btn>
+      </v-container>
       <v-container>
         <h1 class="section-title">商品登録</h1>
         <v-form v-model="valid" ref="form" class="v-form">
@@ -255,7 +264,11 @@
               this.responseMessage = '登録に失敗しました';
             }
           }
-        }
+        },
+        goBack() {
+  window.location.href = 'EmployeeMenu.html';
+}
+      
       }
     });
   </script>
