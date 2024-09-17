@@ -53,7 +53,7 @@ function login() {
       sessionStorage.setItem('userPassword', password);  // パスワードも保存
 
       // 直接マイページへリダイレクト
-      window.location.href = "Mypage.html";
+      window.location.href = "index.html";
     } else {
       showMessage("メールアドレスまたはパスワードが間違っています。", "#f44336");
     }
