@@ -5,11 +5,11 @@ new Vue({
     return {
       userId: null, // 初期値はnull
       images: [
-      'https://i.gyazo.com/5807ebb6796f049b40257dac460f428b.jpg',
-      'https://i.gyazo.com/bc3157f5b5bee205dacee2088caeedc1.jpg',
-      'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/152.jpg',
-      'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/3.jpg',
-      'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/70.jpg'],
+          'https://i.gyazo.com/df69326721337440e0f0965cded2945f.jpg',
+          'https://i.gyazo.com/d77dfc0dbbcd4f10e6ddc6404f2e3400.jpg',
+          'https://i.gyazo.com/0364a01c2dee89ca2f41af442fa4fd68.jpg',
+          'https://i.gyazo.com/48cd6bcc36bf3907c5efc84443dd8763.jpg',
+          'https://i.gyazo.com/1dbed18545469fa09d0b18f625db6484.jpg'],
 
 
       userPrefecture: null,
