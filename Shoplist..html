@@ -307,39 +307,41 @@
       },
 
       mounted() {
-        // URLパラメータからユーザーIDを取得
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlUserID = urlParams.get('userID'); // 大文字の 'userID' を使用
+        // ローカルストレージからユーザーIDを取得
+        const storedUserID = localStorage.getItem('userID');
         
-        if (urlUserID) {
-            this.userID = parseInt(urlUserID, 10);
+        if (storedUserID) {
+            this.userID = parseInt(storedUserID, 10);
             console.log('取得したユーザーID:', this.userID);
             this.fetchshoplist();
         } else {
-            alert('ユーザーIDが指定されていません。URLにuserIDパラメータを含めてアクセスしてください。');
-            console.error('URLパラメータが見つからないため、ユーザーIDが設定されていません。');
+            alert('ユーザーIDが指定されていません。ログインが必要です。');
+            console.error('ローカルストレージにユーザーIDが存在しません。');
+            // ログインページにリダイレクトする場合
+            window.location.href = 'UserLogin.html';
         }
       },
 
       methods: {
         async fetchshoplist() {
-          console.log("データ取得開始：", "User_ID:", this.userID);
+          console.log("データ取得開始：", "User_ID:", this.userID); // ここでログを追加
           const param = {
               User_ID: this.userID
           };
 
           try {
-              console.log(`APIに送信するリクエストパラメータ:`, param);
+              console.log(`APIに送信するリクエストパラメータ:`, param); // リクエスト前のログ
               const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param, {
                   headers: {
-                      'Cache-Control': 'no-cache'
+                      'Cache-Control': 'no-cache' // キャッシュを無効化
                   }
               });
 
               if (response.data && response.data.ShoplistList) {
-                  console.log('APIから返されたデータ:', response.data.ShoplistList);
-                  this.desserts = response.data.ShoplistList;
+                  console.log('APIから返されたデータ:', response.data.ShoplistList); // 返されたデータをログ
+                  this.desserts = response.data.ShoplistList; // 取得したデータを直接セット
                   
+                  // 商品情報を追加で取得する
                   const fetchItemData = this.desserts.map(async item => {
                       const param2 = { Item_ID: item.Item_ID };
 
@@ -359,7 +361,10 @@
                       }
                   });
 
+                  // すべての非同期操作が完了するのを待ちます
                   await Promise.all(fetchItemData);
+
+                  // 合計金額を計算
                   this.calculateTotalPrice();
                   console.log('最終的なデータ:', this.desserts);
               } else {
