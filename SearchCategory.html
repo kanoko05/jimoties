@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>カテゴリ</title>
+  <title>カテゴリ検索</title>
   
 
 </head>
@@ -14,7 +14,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ジモティーズ</title>
-
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.min.css" rel="stylesheet">
   <style>
@@ -169,9 +168,9 @@
 
     /* リンクのデフォルトスタイルを完全にリセット */
     a {
-      text-decoration: none !important; /* 下線を消す */
-      color: inherit !important; /* 親のカラーを継承 */
-      border: none !important; /* 全てのリンクのボーダーを消す */
+      text-decoration: none !important;
+      color: inherit !important;
+      border: none !important;
     }
     
   </style>
@@ -226,8 +225,8 @@
             <h3 class="products-title">名産品リスト</h3>
             <div class="products-grid">
               <a v-for="product in selectedProducts" 
-                 :key="product.name" 
-                 :href="'ItemDetail.html?name=' + product.name" 
+                 :key="product.id" 
+                 :href="'ItemDetail.html?id=' + product.id" 
                  class="product-card">
                 <img :src="product.image" alt="">
                 <p>{{ product.name }}</p>
@@ -303,6 +302,7 @@
             // ItemTableListプロパティを正しく参照してデータを取得
             if (data.ItemTableList && Array.isArray(data.ItemTableList)) {
               this.selectedProducts = data.ItemTableList.map(product => ({
+                id: product.Item_ID || 'IDなし',  // 商品IDを取得してidプロパティに設定
                 name: product.Item_name || '商品名なし',
                 price: product.Item_price || '価格未設定',
                 image: product.Item_image || 'https://via.placeholder.com/150',
