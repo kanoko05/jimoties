@@ -73,7 +73,7 @@ function showMessage(message, backgroundColor) {
 }
 
 // アカウント作成機能
-function register() {
+async function register() {
   const user_name = document.getElementById("user_name").value;
   const user_password = document.getElementById("user_password").value;
   const mail = document.getElementById("mail").value;
@@ -86,6 +86,26 @@ function register() {
     showMessage("全ての項目は必須です。", "#f44336");
     return;
   }
+
+  // 既存のメールアドレスをチェックする
+  try {
+    const response = await fetch('https://m3h-minaki-jimoties.azurewebsites.net/api/ListUserId');
+    const usersJson = await response.text(); // レスポンスをテキストで取得
+    const users = JSON.parse(usersJson.replace('SQL RESULT:', '')); // 前のSQL結果部分を削除してJSONにパース
+
+    // メールアドレスが既に存在するか確認
+    const existingUser = users.List.find(user => user.Email === email);
+
+    if (existingUser) {
+      showMessage("このメールアドレスは既に登録されています。", "#f44336");
+      return;  // 重複している場合は処理を中断
+    }
+  } catch (error) {
+    console.error("エラー:", error);
+    showMessage("メールアドレスの重複確認中にエラーが発生しました。", "#f44336");
+    return;
+  }
+
 
   // APIを通じてデータベースに登録する
   fetch("https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/RegisterUser", {

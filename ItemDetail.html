@@ -13,7 +13,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>ジモティーズ - 商品詳細</title>
+=======
+    <title>ジモティーズ - 地域から探す</title>
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.min.css" rel="stylesheet">
     <style>
@@ -21,9 +25,15 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+<<<<<<< HEAD
             background-color: #e0f0e6;
         }
 
+=======
+            background-color: #e0f0e6; /* ページ全体の背景色を #e0f0e6 に */
+        }
+        
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         .header, .footer {
             background-color: #f5f5f5;
             padding: 10px;
@@ -63,8 +73,13 @@
             min-width: 50px;
             padding: 8px 16px;
         }
+<<<<<<< HEAD
 
         .cart-icon {
+=======
+      
+       .cart-icon {
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
             position: relative;
             display: inline-block;
         }
@@ -83,6 +98,10 @@
             text-align: center;
         }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         .breadcrumb {
             margin: 20px;
             font-size: 14px;
@@ -123,7 +142,11 @@
         }
 
         .item-details {
+<<<<<<< HEAD
             background-color: #f9f9f9;
+=======
+            background-color: #f9f9f9; /* ディテールセクションの背景 */
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
             padding: 15px;
             border-radius: 5px;
             margin-top: 15px;
@@ -141,7 +164,11 @@
             display: flex;
             align-items: center;
             margin-top: 20px;
+<<<<<<< HEAD
             gap: 20px;
+=======
+            gap: 20px; /* ボタン間の間隔 */
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         }
 
         .cart-button,
@@ -158,19 +185,39 @@
         }
 
         .cart-button {
+<<<<<<< HEAD
             background-color: #ff6d00;
+=======
+            background-color: #ff6d00; /* カートボタンの色を元に戻す */
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
             color: white;
             border: none;
         }
 
         .cart-button:hover {
+<<<<<<< HEAD
             background-color: #e65a00;
+=======
+            background-color: #e65a00; /* カートボタンホバー時の色 */
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         }
 
         .favorite-button {
             background-color: transparent;
             border: 2px solid #b5622f;
             color: #b5622f;
+<<<<<<< HEAD
+=======
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px; /* ボタン内のパディング調整 */
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: auto; /* 幅はコンテンツに自動調整 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         }
 
         .favorite-button:hover {
@@ -178,14 +225,24 @@
         }
 
         .favorite-button i {
+<<<<<<< HEAD
             margin-right: 8px;
             font-size: 16px;
             vertical-align: middle;
+=======
+            margin-right: 8px; /* アイコンとテキストの間隔を調整 */
+            font-size: 16px; /* アイコンのサイズを調整 */
+            vertical-align: middle; /* アイコンを中央に配置 */
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         }
 
         .cart-button i,
         .favorite-button i {
+<<<<<<< HEAD
             vertical-align: middle;
+=======
+            vertical-align: middle; /* アイコンをテキストに中央寄せ */
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         }
     </style>
 </head>
@@ -207,22 +264,37 @@
         </div>
         <!-- ナビゲーションバー -->
         <v-toolbar flat class="navbar">
+<<<<<<< HEAD
+=======
+            
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
             <v-spacer></v-spacer>
             <v-btn class="icon-button" text @click="goToMypage">
                 <v-icon>mdi-account</v-icon>
                 <span>マイページ</span>
             </v-btn>
+<<<<<<< HEAD
             <v-btn class="icon-button cart-icon" text @click="goToCart">
+=======
+             <v-btn class="icon-button cart-icon" text @click="goToCart">
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                 <v-icon>mdi-heart</v-icon>
                 <span>お気に入り</span>
             </v-btn>
             <v-btn class="icon-button" flat>
                 <v-icon>mdi-cart</v-icon>
                 <span>カート</span>
+<<<<<<< HEAD
                 <span class="cart-badge" v-if="cartQuantity > 0">{{ cartQuantity }}</span>
             </v-btn>
         </v-toolbar>
 
+=======
+               <span class="cart-badge" v-if="cartQuantity > 0">{{ cartQuantity }}</span>
+            </v-btn>
+        </v-toolbar>
+        
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         <!-- メインコンテンツ -->
         <v-main>
             <v-container>
@@ -232,10 +304,18 @@
 
                 <div class="item-detail">
                     <div class="item-images">
+<<<<<<< HEAD
                         <img :src="item.image || 'https://via.placeholder.com/150'" alt="商品画像" class="main-image">
                     </div>
 
                     <div class="item-info">
+=======
+                        <!-- メイン画像のみ表示 -->
+                        <img src="item.image" alt="商品画像" class="main-image">
+                    </div>
+
+                                 <div class="item-info">
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                         <h1>{{ item.name }}</h1>
                         <p class="price">{{ item.price }}円</p>
 
@@ -246,7 +326,11 @@
                         </div>
 
                         <div class="actions">
+<<<<<<< HEAD
                             <v-text-field
+=======
+                               <v-text-field
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                                 v-model="itemQuantity"
                                 label="個数を選択"
                                 type="number"
@@ -265,7 +349,11 @@
                 </div>
             </v-container>
         </v-main>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
         <!-- フッター -->
         <v-footer class="footer">
             &copy; 2024 ジモティーズ. All rights reserved.
@@ -276,10 +364,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.js"></script>
+<<<<<<< HEAD
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- sweetalert2 を追加 -->
 
 <script>
+=======
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- sweetalert2 を追加 -->
+
+  <script>
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
     new Vue({
         el: '#app',
         vuetify: new Vuetify(),
@@ -288,6 +383,7 @@
                 item: {},
                 itemQuantity: 1,
                 cartQuantity: 0,
+<<<<<<< HEAD
                 item_ID: this.getItemIDFromUrl(), // URLから取得
                 userID: this.getUserIDFromSession(), // セッションから取得（仮）
             };
@@ -305,6 +401,26 @@
                             prefecture: itemData.Item_prefecture || '産地不明',
                             stock: itemData.Item_stock || 0,
                             image: itemData.Item_image || 'https://via.placeholder.com/150'
+=======
+                item_Id: this.getItemIDFromUrl(), // URLから取得
+                userID: this.getUserIDFromSession(), // セッションから取得（仮）
+                dataList: []
+            };
+        },
+        methods: {
+            readData: async function() {
+                try {
+                    const response = await axios.get(`https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_name=${this.itemname}`);
+                    if (response.data.ItemTableList && response.data.ItemTableList.length > 0) {
+                        const itemData = response.data.ItemTableList[0];
+                        this.item = {
+                            name: itemData.Item_name,
+                            price: itemData.Item_price,
+                            category: itemData.Item_category,
+                            prefecture: itemData.Item_prefecture,
+                            stock: itemData.Item_stock,
+                            image: itemData.Item_image
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                         };
                     }
                 } catch (error) {
@@ -327,11 +443,19 @@
                 .then(response => response.json())
                 .then(data => {
                     this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
+<<<<<<< HEAD
                     Swal.fire('成功', 'カートに追加されました！', 'success');
                 })
                 .catch(error => {
                     console.error('Error adding item to cart:', error);
                     Swal.fire('エラー', 'カートに追加できませんでした。', 'error');
+=======
+                    Swal.fire('成功', 'カートに追加されました！', 'success'); // SweetAlertの通知
+                })
+                .catch(error => {
+                    console.error('Error adding item to cart:', error);
+                    Swal.fire('エラー', 'カートに追加できませんでした。', 'error'); // SweetAlertのエラー通知
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                 });
             },
 
@@ -352,23 +476,41 @@
                 })
                 .then(data => {
                     if (data.status === "Success") {
+<<<<<<< HEAD
                         Swal.fire('成功', 'お気に入りに追加しました！', 'success');
                     } else {
                         Swal.fire('エラー', 'お気に入りに追加できませんでした。', 'error');
+=======
+                        Swal.fire('成功', 'お気に入りに追加しました！', 'success'); // SweetAlertの成功通知
+                    } else {
+                        Swal.fire('エラー', 'お気に入りに追加できませんでした。', 'error'); // SweetAlertのエラー通知
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                     }
                 })
                 .catch(error => {
                     console.error('Error adding item to favorite:', error);
+<<<<<<< HEAD
                     Swal.fire('エラー', '通信エラーが発生しました。', 'error');
+=======
+                    Swal.fire('エラー', '通信エラーが発生しました。', 'error'); // SweetAlertのエラー通知
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                 });
             },
 
             getItemIDFromUrl() {
                 const params = new URLSearchParams(window.location.search);
+<<<<<<< HEAD
                 return params.get('id');
             },
 
             getUserIDFromSession() {
+=======
+                return params.get('item_ID');
+            },
+
+            getUserIDFromSession() {
+                // セッションやローカルストレージからユーザーIDを取得する想定
+>>>>>>> a0125bb3028af9e001ed432dd4a88ed00c0ccc0a
                 return sessionStorage.getItem('userID') || 1; // デフォルト値
             },
 
