@@ -307,16 +307,16 @@
       },
 
       mounted() {
-        // ローカルストレージからユーザーIDを取得
-        const storedUserID = localStorage.getItem('userID');
-        
+        // sessionStorageからユーザーIDを取得
+        const storedUserID = sessionStorage.getItem('user_ID'); // sessionStorageから取得
+
         if (storedUserID) {
             this.userID = parseInt(storedUserID, 10);
             console.log('取得したユーザーID:', this.userID);
             this.fetchshoplist();
         } else {
             alert('ユーザーIDが指定されていません。ログインが必要です。');
-            console.error('ローカルストレージにユーザーIDが存在しません。');
+            console.error('セッションストレージにユーザーIDが存在しません。');
             // ログインページにリダイレクトする場合
             window.location.href = 'UserLogin.html';
         }
@@ -324,13 +324,13 @@
 
       methods: {
         async fetchshoplist() {
-          console.log("データ取得開始：", "User_ID:", this.userID); // ここでログを追加
+          console.log("データ取得開始：", "User_ID:", this.userID);
           const param = {
               User_ID: this.userID
           };
 
           try {
-              console.log(`APIに送信するリクエストパラメータ:`, param); // リクエスト前のログ
+              console.log(`APIに送信するリクエストパラメータ:`, param);
               const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param, {
                   headers: {
                       'Cache-Control': 'no-cache' // キャッシュを無効化
@@ -338,7 +338,7 @@
               });
 
               if (response.data && response.data.ShoplistList) {
-                  console.log('APIから返されたデータ:', response.data.ShoplistList); // 返されたデータをログ
+                  console.log('APIから返されたデータ:', response.data.ShoplistList);
                   this.desserts = response.data.ShoplistList; // 取得したデータを直接セット
                   
                   // 商品情報を追加で取得する
