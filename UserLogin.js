@@ -52,7 +52,7 @@ function login() {
       sessionStorage.setItem('telephone', user.telephone);
       sessionStorage.setItem('userPassword', password);  // パスワードも保存
 
-      // 直接マイページへリダイレクト
+      // 直接ホームへリダイレクト
       window.location.href = "index.html";
     } else {
       showMessage("メールアドレスまたはパスワードが間違っています。", "#f44336");
@@ -122,7 +122,7 @@ function register() {
 
       // 2秒後に「ご登録ありがとうございましたページ」にリダイレクト
       setTimeout(() => {
-        window.location.href = "https://codepen.io/yusaku0612/pen/ZEdmMQo";
+        window.location.href = "Thankyou.html";
       }, 2000);
     } else {
       showMessage("アカウント作成に失敗しました。", "#f44336");
