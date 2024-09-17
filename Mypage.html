@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>マイページ</title>
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css'>
-<link rel='stylesheet' href='https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css'>
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900'><link rel="stylesheet" href="./Mypage.css">
+  
 
 </head>
 <body>
@@ -17,11 +15,34 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>マイページ</title>
-  <!-- VuetifyのCSSとJS、Vue.jsのCDNリンクを追加 -->
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.js"></script>
+  <style>
+    .custom-app-bar {
+      max-height: 50px !important;
+      padding: 0 16px;
+    }
+    .v-toolbar-title {
+      line-height: 30px !important;
+    }
+    .custom-btn-primary, .custom-btn-secondary {
+      background-color: #7b9e7a !important;
+      color: white !important;
+      border-radius: 4px;
+    }
+    .custom-btn-back {
+      background-color: #f44336 !important; /* 赤色 */
+      color: white !important; /* 白文字 */
+      border-radius: 4px;
+    }
+    .custom-btn-home {
+      color: #ffffff !important; /* 白文字 */
+      text-transform: none !important; /* テキストの変形を無効化 */
+      font-size: 16px !important; /* フォントサイズの調整 */
+    }
+  </style>
 </head>
 <body>
   <div id="app">
@@ -77,14 +98,42 @@
     </v-app>
   </div>
 
-  <!-- 外部JavaScriptファイルの読み込み -->
-  <script src="app.js"></script>
+  <!-- Vue.js のインスタンス作成 -->
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      methods: {
+        goToHome() {
+          // ホームページに遷移する処理
+          window.location.href = 'index.html';
+        },
+        goToPurchaseHistory() {
+          // 購入履歴ページに遷移
+          window.location.href = 'BuyHistory.html';
+        },
+        goToPersonalInfo() {
+          // 個人情報編集ページに遷移
+          window.location.href = 'RegisterInfo.html';
+        },
+        goToCart() {
+          // カートページに遷移
+          window.location.href = 'Shoplist.html';
+        },
+        goToFavorites() {
+          // お気に入りページに遷移
+          window.location.href = 'Favorite.html';
+        },
+        goBack() {
+          // 前のページに戻る
+          window.history.back();
+        }
+      }
+    });
+  </script>
 </body>
 </html>
 <!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js'></script><script  src="./Mypage.js"></script>
-
+  
 </body>
 </html>
