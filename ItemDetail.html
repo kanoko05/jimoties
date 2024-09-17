@@ -295,15 +295,19 @@
         methods: {
             async readData() {
                 try {
-                    // APIに商品IDを使ってリクエスト
+                    // 商品IDに基づいてAPIリクエストを送信
                     const response = await axios.get(`https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_ID=${this.item_ID}`);
                     
-                    // レスポンスの確認
-                    console.log('API Response:', response.data); 
+                    // APIレスポンスの確認
+                    console.log('API Response:', response.data);
 
-                    // 商品情報の処理
+                    // レスポンスが期待した形式か確認
                     if (response.data && response.data.ItemTableList && response.data.ItemTableList.length > 0) {
+                        // 正しいアイテムが取得できたかをログで確認
                         const itemData = response.data.ItemTableList[0];
+                        console.log('取得した商品データ:', itemData);
+
+                        // 取得した商品データを表示に反映
                         this.item = {
                             name: itemData.Item_name || '商品名なし',
                             price: itemData.Item_price || '価格未設定',
@@ -313,7 +317,7 @@
                             image: itemData.Item_image || 'https://via.placeholder.com/150'
                         };
                     } else {
-                        console.error('商品データが見つかりません。');
+                        console.error('商品データが見つかりません。', response.data);
                         Swal.fire('エラー', '商品情報が見つかりません。', 'error');
                     }
                 } catch (error) {
