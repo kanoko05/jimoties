@@ -295,10 +295,20 @@
         methods: {
             async readData() {
                 try {
+                    // 商品IDが正しく取得されているか確認
+                    console.log('取得した商品ID:', this.item_ID);
+
+                    // 商品IDが取得できていない場合の対応
+                    if (!this.item_ID) {
+                        Swal.fire('エラー', '商品IDが取得できません。もう一度試してください。', 'error');
+                        return;
+                    }
+
                     // 商品IDに基づいてAPIリクエストを送信
                     const response = await axios.get(`https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_ID=${this.item_ID}`);
                     
                     // APIレスポンスの確認
+                    console.log('APIリクエスト URL:', `https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_ID=${this.item_ID}`);
                     console.log('API Response:', response.data);
 
                     // レスポンスが期待した形式か確認
@@ -379,11 +389,16 @@
 
             getItemIDFromUrl() {
                 const params = new URLSearchParams(window.location.search);
-                return params.get('id');
+                const id = params.get('id');
+                if (!id) {
+                    console.error('商品IDがURLから取得できません。');
+                    Swal.fire('エラー', '商品IDが見つかりません。', 'error');
+                }
+                return id;
             },
 
             getUserIDFromSession() {
-                return sessionStorage.getItem('userID') || 1; // デフォルト値
+                return sessionStorage.getItem('userID') || null; // 必要に応じてnullに修正
             },
 
             goToHome() {
