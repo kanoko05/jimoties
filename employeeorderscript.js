@@ -94,4 +94,4 @@ goBack() {
   window.location.href = 'EmployeeMenu.html';
 }
 
-});
+}});
