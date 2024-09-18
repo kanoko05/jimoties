@@ -57,7 +57,7 @@ new Vue({
       console.log("商品引き渡し", productName);
 
       // 商品名をクエリパラメータとしてURLに追加して遷移
-      window.location.href = `ItemDetail.html?productName=${productName}`;
+      window.location.href = `/ItemDetail.html?name=${encodeURIComponent(productName)}`;
     },
     itemClicked(item) {
       console.log("商品引き渡し", item.Item_name);
