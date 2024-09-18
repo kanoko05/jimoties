@@ -32,7 +32,7 @@
         <div class="header-right">
           <!-- ホームに戻るボタンの追加 -->
           <v-btn text color="#7b9e7a" @click="goHome">ホーム</v-btn>
-          
+          <v-btn @click="logout" text color="#7b9e7a">ログアウト</v-btn>
         </div>
       </div>
       <!-- 題名バー -->
@@ -327,6 +327,11 @@
       
       back(){
       window.location.href = `Mypage.html`
+    },
+
+    logout() {
+      sessionStorage.removeItem('user_ID');
+      window.location.href = `UserLogin.html`;
     },
       }
       
