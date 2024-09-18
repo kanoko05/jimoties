@@ -227,7 +227,7 @@
             <div class="items-grid">
               <a v-for="item in selectedItems" 
                  :key="item.name" 
-                 :href="'https://codepen.io/yusaku0612/pen/MWMMqJM?name=' + encodeURIComponent(item.name)"
+                 :href="'ItemDetail.html?name' + encodeURIComponent(item.name)"
                  class="item-card">
                 <img :src="item.image" alt="">
                 <p>{{ item.name }}</p>
