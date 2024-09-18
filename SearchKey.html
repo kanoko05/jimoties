@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>キーワード検索最新</title>
+  <title>キーワード検索</title>
   
 
 </head>
@@ -200,7 +200,7 @@
           <div class="product-list">
             <v-row>
               <v-col v-for="product in products" :key="product.Item_ID" cols="12" sm="6" md="4">
-                <v-card class="product-card" @click="goToProductDetail(product.Item_ID)">
+                <v-card class="product-card" @click="goToProductDetail(product.Item_name)">
                   <v-img :src="product.Item_image" height="150"></v-img>
                   <v-card-title>{{ product.Item_name }}</v-card-title>
                   <v-card-subtitle>産地: {{ product.Item_prefecture }}</v-card-subtitle>
@@ -253,8 +253,8 @@
         goCart() {
           window.location.href = 'Shoplist.html';
         },
-        goToProductDetail(itemId) {
-          window.location.href = `ItemDetail.html?id=${itemId}`;
+        goToProductDetail(productName) {
+          window.location.href = `ItemDetail.html?name=${encodeURIComponent(productName)}`;
         },
         goAdminLogin() {
           window.location.href = 'EmployeeLogin.html';
