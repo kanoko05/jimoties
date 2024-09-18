@@ -62,7 +62,7 @@ new Vue({
     itemClicked(item) {
       console.log("商品引き渡し", item.Item_name);
       // 商品名を取得
-      const itemName = encodeURIComponent(item.Item_name); // URLエンコード
+      const itemName = item.Item_name; // URLエンコード
       console.log("商品引き渡し", itemName);
 
       // 商品名をクエリパラメータとしてURLに追加して遷移
