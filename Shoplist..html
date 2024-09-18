@@ -29,8 +29,7 @@
         </div>
         <div class="header-right">
           <v-btn text color="#7b9e7a" @click="goHome">ホーム</v-btn>
-          <v-btn text color="#7b9e7a" @click="goLogin">ログイン</v-btn>
-          <v-btn text color="#7b9e7a" @click="goRegister">新規登録</v-btn>
+          <v-btn @click="logout" text color="#7b9e7a">ログアウト</v-btn>
         </div>
       </div>
       <!-- 題名バー -->
@@ -456,6 +455,10 @@
         goAdminLogin() {
           window.location.href = 'EmployeeLogin.html';
         },
+        logout() {
+      sessionStorage.removeItem('user_ID');
+      window.location.href = `UserLogin.html`;
+    },
       },
 
       watch: {
