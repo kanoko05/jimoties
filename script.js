@@ -53,7 +53,7 @@ new Vue({
     cardClicked(product) {
       console.log("商品引き渡し", product.name);
       // 商品名を取得
-      const productName = encodeURIComponent(product.name); // URLエンコード
+      const productName = product.name; // URLエンコード
       console.log("商品引き渡し", productName);
 
       // 商品名をクエリパラメータとしてURLに追加して遷移
