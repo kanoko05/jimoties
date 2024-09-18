@@ -171,11 +171,20 @@
                 </div>
             </div>
             <div class="header-right">
-                <v-btn text color="#7b9e7a" @click="navigateTo('index.html')">ホーム</v-btn>
-                <v-btn text color="#7b9e7a" @click="navigateTo('UserLogin.html')">ログイン・新規登録</v-btn>
+                <!-- userIdが存在する場合は「ログイン済」と表示 -->
+                <template v-if="userId">
+                    <v-btn @click="goHome" text color="#7b9e7a">ホーム</v-btn>
+                    <v-btn @click="logout" text color="#7b9e7a">ログアウト</v-btn>
+                </template>
+                <!-- userIdが存在しない場合は「ログイン」と「新規登録」のボタンを表示 -->
+                <template v-else>
+                    <v-btn @click="goHome" text color="#7b9e7a">ホーム</v-btn>
+                    <v-btn @click="login" text color="#7b9e7a">ログイン・新規登録</v-btn>
+                </template>
             </div>
         </div>
         <v-toolbar flat class="navbar">
+            <template v-if="userId">
             <v-spacer></v-spacer>
             <v-btn class="icon-button" flat @click="navigateTo('Mypage.html')">
                 <v-icon>mdi-account</v-icon>
@@ -185,10 +194,11 @@
                 <v-icon>mdi-heart</v-icon>
                 <span>お気に入り</span>
             </v-btn>
-            <v-btn class="icon-button" flat @click="navigateTo('Shoplist.html')">
+            <v-btn class="icon-button" flat @click="navigateTo('Shoplist..html')">
                 <v-icon>mdi-cart</v-icon>
                 <span>カート</span>
             </v-btn>
+        </template>
         </v-toolbar>
         <v-main>
             <v-container>
@@ -248,12 +258,30 @@
         vuetify: new Vuetify(),
         data() {
             return {
+                userId: null, // 初期値はnull
                 showPrefectureList: false,
                 currentPrefectures: [],
                 selectedProducts: [],
                 apiUrl: 'https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemPrefecture', // APIエンドポイント
             };
         },
+
+        mounted() {
+    //sessionStorage.setItem('user_ID', 1);
+    // sessionStorageからuser_idを取得
+    // セッションストレージからユーザーIDを取得
+    const storedUserId = sessionStorage.getItem('user_ID');
+
+    // ユーザーIDがセッションストレージに保存されていた場合
+    if (storedUserId) {
+      // 保存されていたユーザーIDを変数にセット
+      this.userId = storedUserId;
+    } else {
+      // ユーザーIDが保存されていない場合の処理（必要なら追加）
+      console.log('保存なし');
+    }
+  },
+
         methods: {
             showRegion(region) {
                 // 名産品を取得して表示する処理を追加
@@ -313,8 +341,23 @@
             },
             navigateTo(page) {
                 window.location.href = `/${page}`;
-            }
+            },
+
+            logout() {
+                sessionStorage.removeItem('user_ID');
+                window.location.href = `UserLogin.html`;
+            },
+
+            login() {
+                window.location.href = `UserLogin.html`;
+            },
+
+            goHome() {
+                window.location.href = 'index.html';
+            },
         },
+
+        
     });
 </script>
 
