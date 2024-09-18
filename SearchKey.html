@@ -159,12 +159,20 @@
           </div>
         </div>
         <div class="header-right">
-          <v-btn text color="#7b9e7a" @click="goHome">ホーム</v-btn>
-          <v-btn text color="#7b9e7a" @click="goLogin">ログイン・新規登録</v-btn>
+          <template v-if="userId">
+            <v-btn @click="goHome" text color="#7b9e7a">ホーム</v-btn>
+            <v-btn @click="logout" text color="#7b9e7a">ログアウト</v-btn>
+          </template>
+          <!-- userIdが存在しない場合は「ログイン」と「新規登録」のボタンを表示 -->
+          <template v-else>
+            <v-btn @click="goHome" text color="#7b9e7a">ホーム</v-btn>
+            <v-btn @click="goLogin" text color="#7b9e7a">ログイン・新規登録</v-btn>
+          </template>
           
         </div>
       </div>
       <v-toolbar flat class="navbar">
+        <template v-if="userId">
         <v-spacer></v-spacer>
         <v-btn class="icon-button" flat @click="goMypage">
           <v-icon>mdi-account</v-icon>
@@ -178,6 +186,7 @@
           <v-icon>mdi-cart</v-icon>
           <span>カート</span>
         </v-btn>
+      </template>
       </v-toolbar>
 
       <v-main>
@@ -232,11 +241,29 @@
       vuetify: new Vuetify(),
       data() {
         return {
+          userId: null, // 初期値はnull
           keyword: '',
           products: [],
           message: ''
         };
       },
+
+      mounted() {
+    //sessionStorage.setItem('user_ID', 1);
+    // sessionStorageからuser_idを取得
+    // セッションストレージからユーザーIDを取得
+    const storedUserId = sessionStorage.getItem('user_ID');
+
+    // ユーザーIDがセッションストレージに保存されていた場合
+    if (storedUserId) {
+      // 保存されていたユーザーIDを変数にセット
+      this.userId = storedUserId;
+    } else {
+      // ユーザーIDが保存されていない場合の処理（必要なら追加）
+      console.log('保存なし');
+    }
+  },
+
       methods: {
         goHome() {
           window.location.href = 'index.html';
@@ -258,6 +285,11 @@
         },
         goAdminLogin() {
           window.location.href = 'EmployeeLogin.html';
+        },
+
+        logout() {
+      sessionStorage.removeItem('user_ID');
+      window.location.href = `UserLogin.html`;
         },
         async searchItems() {
           try {
