@@ -288,20 +288,14 @@
                 item: {},
                 itemQuantity: 1,
                 cartQuantity: 0,
-<<<<<<< HEAD
                 item_name: this.getItemNameFromUrl(), // URLから取得した商品名を使用
                 item_ID: null, // APIから取得する商品IDを保存する変数
                 user_ID: this.getUserIDFromSession(), // セッションから取得（仮）
-=======
-                item_ID: this.getItemIDFromUrl(), // URLから取得したIDを使用
-                userID: this.getUserIDFromSession(), // セッションから取得（仮）
->>>>>>> bfb5582a4e2115b9b0399606c95457b3454c95a3
             };
         },
         methods: {
             async readData() {
                 try {
-<<<<<<< HEAD
                     // 商品名が正しく取得されているか確認
                     console.log('取得した商品名:', this.item_name);
 
@@ -310,22 +304,6 @@
                     
                     // APIレスポンスの確認
                     console.log('APIリクエスト URL:', `https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_name=${encodeURIComponent(this.item_name)}`);
-=======
-                    // 商品IDが正しく取得されているか確認
-                    console.log('取得した商品ID:', this.item_ID);
-
-                    // 商品IDが取得できていない場合の対応
-                    if (!this.item_ID) {
-                        Swal.fire('エラー', '商品IDが取得できません。もう一度試してください。', 'error');
-                        return;
-                    }
-
-                    // 商品IDに基づいてAPIリクエストを送信
-                    const response = await axios.get(`https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_ID=${this.item_ID}`);
-                    
-                    // APIレスポンスの確認
-                    console.log('APIリクエスト URL:', `https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName?Item_ID=${this.item_ID}`);
->>>>>>> bfb5582a4e2115b9b0399606c95457b3454c95a3
                     console.log('API Response:', response.data);
 
                     // レスポンスが期待した形式か確認
@@ -343,13 +321,10 @@
                             stock: itemData.Item_stock || 0,
                             image: itemData.Item_image || 'https://via.placeholder.com/150'
                         };
-<<<<<<< HEAD
 
                         // item_IDを取得して保存
                         this.item_ID = itemData.Item_ID;
                         console.log('取得した商品ID:', this.item_ID);
-=======
->>>>>>> bfb5582a4e2115b9b0399606c95457b3454c95a3
                     } else {
                         console.error('商品データが見つかりません。', response.data);
                         Swal.fire('エラー', '商品情報が見つかりません。', 'error');
@@ -423,7 +398,6 @@
 
             getItemNameFromUrl() {
                 const params = new URLSearchParams(window.location.search);
-<<<<<<< HEAD
                 const name = params.get('name');
                 if (!name) {
                     console.error('商品名がURLから取得できません。');
@@ -434,18 +408,6 @@
 
             getUserIDFromSession() {
                 return sessionStorage.getItem('user_ID') || null; // 必要に応じてnullに修正
-=======
-                const id = params.get('id');
-                if (!id) {
-                    console.error('商品IDがURLから取得できません。');
-                    Swal.fire('エラー', '商品IDが見つかりません。', 'error');
-                }
-                return id;
-            },
-
-            getUserIDFromSession() {
-                return sessionStorage.getItem('userID') || null; // 必要に応じてnullに修正
->>>>>>> bfb5582a4e2115b9b0399606c95457b3454c95a3
             },
 
             goToHome() {
