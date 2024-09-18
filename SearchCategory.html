@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>カテゴリー検索</title>
+  <title>CodePen - カテゴリ〇九一二</title>
   
 
 </head>
@@ -114,7 +114,7 @@
       grid-column: 1 / -1;
     }
 
-    .products-container {
+    .items-container {
       position: relative;
       margin: 20px auto;
       max-width: 600px;
@@ -122,7 +122,7 @@
       text-align: center;
     }
 
-    .products-title {
+    .items-title {
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 30px;
@@ -130,14 +130,14 @@
       color: #7b9e7a;
     }
 
-    .products-grid {
+    .items-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
 
-    .product-card {
+    .item-card {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -150,11 +150,11 @@
       transition: transform 0.2s;
     }
 
-    .product-card:hover {
+    .item-card:hover {
       transform: scale(1.05);
     }
 
-    .product-card img {
+    .item-card img {
       width: 150px;
       height: 150px;
       object-fit: cover;
@@ -162,7 +162,7 @@
       margin-bottom: 10px;
     }
 
-    .product-card p {
+    .item-card p {
       margin: 5px 0;
       color: #7b9e7a;
     }
@@ -216,24 +216,24 @@
                    outlined 
                    color="#7b9e7a" 
                    class="mx-2" 
-                   @click="fetchProducts(category)">
+                   @click="fetchItems(category)">
               <v-icon left>{{ category.icon }}</v-icon>{{ category.name }}
             </v-btn>
           </div>
 
           <!-- 名産品リスト -->
-          <div class="products-container" v-if="selectedProducts.length">
-            <h3 class="products-title">名産品リスト</h3>
-            <div class="products-grid">
-              <a v-for="product in selectedProducts" 
-                 :key="product.name" 
-                 :href="'ItemDetail.html?name=' + encodeURIComponent(product.name)"
-                 class="product-card">
-                <img :src="product.image" alt="">
-                <p>{{ product.name }}</p>
-                <p>{{ product.description }}</p>
-                <p>産地: {{ product.region }}</p>
-                <p>{{ product.price }}円</p>
+          <div class="items-container" v-if="selectedItems.length">
+            <h3 class="items-title">名産品リスト</h3>
+            <div class="items-grid">
+              <a v-for="item in selectedItems" 
+                 :key="item.name" 
+                 :href="'ItemDetail.html?name=' + encodeURIComponent(item.name)"
+                 class="item-card">
+                <img :src="item.image" alt="">
+                <p>{{ item.name }}</p>
+                <p>{{ item.description }}</p>
+                <p>産地: {{ item.region }}</p>
+                <p>{{ item.price }}円</p>
               </a>
             </div>
           </div>
@@ -272,12 +272,12 @@
             { name: 'その他', icon: 'mdi-dots-horizontal' }
           ],
           selectedCategory: {},
-          selectedProducts: [],
+          selectedItems: [],
           apiUrl: 'https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemCategory' // APIのURLを設定
         };
       },
       methods: {
-        async fetchProducts(category) {
+        async fetchItems(category) {
           this.selectedCategory = category;
           try {
             const response = await fetch(this.apiUrl, {
@@ -302,11 +302,11 @@
 
             // ItemTableListプロパティを正しく参照してデータを取得
             if (data.ItemTableList && Array.isArray(data.ItemTableList)) {
-              this.selectedProducts = data.ItemTableList.map(product => ({
-                name: product.Item_name || '商品名なし',
-                price: product.Item_price || '価格未設定',
-                image: product.Item_image || 'https://via.placeholder.com/150',
-                region: product.Item_prefecture || '産地不明'
+              this.selectedItems = data.ItemTableList.map(item => ({
+                name: item.Item_name || '商品名なし',
+                price: item.Item_price || '価格未設定',
+                image: item.Item_image || 'https://via.placeholder.com/150',
+                region: item.Item_prefecture || '産地不明'
               }));
             } else {
               console.error('データ形式が正しくありません。', data);
