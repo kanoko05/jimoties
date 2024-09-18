@@ -91,15 +91,12 @@ new Vue({
     console.log("削除用データの確認：", params);
     
     try {
-      // アイテムをShoplistから削除
-      const deleteResponse = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItemShopList', params);
-      console.log("カート削除返答", deleteResponse);
       
       // アイテムを購入リストに追加
       const addResponse = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemBuy', params);
       console.log("購入追加返答", addResponse);
       
-      window.location.href = `BuyTankyou.html`;
+      window.location.href = `BuyThankyou.html`;
       
     } catch (error) {
       console.error('削除または追加に失敗しました:', error);
