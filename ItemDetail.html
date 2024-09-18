@@ -206,22 +206,22 @@
             </div>
         </div>
         <!-- ナビゲーションバー -->
-        <v-toolbar flat class="navbar">
-            <v-spacer></v-spacer>
-            <v-btn class="icon-button" text @click="goToMypage">
-                <v-icon>mdi-account</v-icon>
-                <span>マイページ</span>
-            </v-btn>
-            <v-btn class="icon-button cart-icon" text @click="goToCart">
-                <v-icon>mdi-heart</v-icon>
-                <span>お気に入り</span>
-            </v-btn>
-            <v-btn class="icon-button" flat>
-                <v-icon>mdi-cart</v-icon>
-                <span>カート</span>
-                <span class="cart-badge" v-if="cartQuantity > 0">{{ cartQuantity }}</span>
-            </v-btn>
-        </v-toolbar>
+          <!-- ナビゲーションバー -->
+<v-toolbar flat class="navbar">
+    <v-spacer></v-spacer>
+    <v-btn class="icon-button" flat @click="goToMypage"> <!-- マイページに遷移 -->
+        <v-icon>mdi-account</v-icon>
+        <span>マイページ</span>
+    </v-btn>
+    <v-btn class="icon-button" flat @click="goToFavorites"> <!-- お気に入りに遷移 -->
+        <v-icon>mdi-heart</v-icon>
+        <span>お気に入り</span>
+    </v-btn>
+    <v-btn class="icon-button" flat @click="goToCart"> <!-- カートに遷移 -->
+        <v-icon>mdi-cart</v-icon>
+        <span>カート</span>
+    </v-btn>
+</v-toolbar>
 
         <!-- メインコンテンツ -->
         <v-main>
@@ -410,6 +410,11 @@
                 return sessionStorage.getItem('user_ID') || null; // 必要に応じてnullに修正
             },
 
+           goToFavorites() {
+            // お気に入りページに遷移
+            window.location.href = 'Favorite.html';
+        },
+          
             goToHome() {
                 window.location.href = 'index.html';
             },
