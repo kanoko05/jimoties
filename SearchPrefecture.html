@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>都道府県最新</title>
+  <title>都道府県検索</title>
   
 
 </head>
@@ -218,7 +218,10 @@
                 <div class="products-container" v-if="selectedProducts.length">
                     <h3 class="products-title">名産品リスト</h3>
                     <div class="products-grid">
-                        <div v-for="product in selectedProducts" :key="product.id" class="product-card" @click="goToProductDetail(product.id)">
+                        <div v-for="product in selectedProducts" 
+                             :key="product.id" 
+                             class="product-card" 
+                             @click="goToProductDetail(product.name)">
                             <img :src="product.image" alt="">
                             <p>{{ product.name }}</p>
                             <p>{{ product.description }}</p>
@@ -303,8 +306,8 @@
                     alert('名産品の取得に失敗しました。もう一度お試しください。');
                 }
             },
-            goToProductDetail(productId) {
-                window.location.href = `/ItemDetail.html?id=${productId}`;
+            goToProductDetail(productName) {
+                window.location.href = `/ItemDetail.html?name=${encodeURIComponent(productName)}`;
             },
             closePrefectureList() {
                 this.showPrefectureList = false;
