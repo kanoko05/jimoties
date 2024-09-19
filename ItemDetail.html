@@ -365,15 +365,27 @@
     })
     .then(response => {
         console.log('APIレスポンス:', response);
+
+        if (!response.ok) {
+            throw new Error(`HTTPエラー: ${response.status}`);
+        }
+
         return response.json();
     })
     .then(data => {
         console.log('APIデータ:', data);
+
         if (data.Status === 'Error') {
-            Swal.fire('エラー', data.Message, 'error');
-        } else {
+            if (data.Message && data.Message.includes('在庫が不足しています')) {
+                Swal.fire('在庫不足', data.Message, 'warning');
+            } else {
+                Swal.fire('エラー', data.Message || '不明なエラーが発生しました。', 'error');
+            }
+        } else if (data.Status === 'Success') {
             this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
             Swal.fire('成功', 'カートに追加されました！', 'success');
+        } else {
+            Swal.fire('警告', '予期しないステータスが返されました。', 'warning');
         }
     })
     .catch(error => {
