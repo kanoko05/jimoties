@@ -364,7 +364,6 @@
         })
     })
     .then(response => {
-        // レスポンスのステータスコードを確認する
         if (!response.ok) {
             throw new Error(`HTTPエラー: ${response.status}`);
         }
@@ -372,25 +371,23 @@
     })
     .then(data => {
         console.log('APIデータ:', data);
-        if (data.Status === 'Error') {
-            // エラーが発生した場合
-            if (data.Message.includes('在庫が不足しています')) {
-                Swal.fire('在庫不足', data.Message, 'error');
+
+        if (data.status === 'Error') {
+            if (data.message.includes('在庫が不足しています')) {
+                Swal.fire('在庫不足', data.message, 'error');
             } else {
-                Swal.fire('エラー', data.Message, 'error');
+                Swal.fire('エラー', data.message, 'error');
             }
-        } else if (data.Status === 'Success') {
-            // 成功した場合
+        } else if (data.status === 'Success') {
             this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
-            Swal.fire('成功', data.Message, 'success');
+            Swal.fire('成功', data.message, 'success');
         } else {
-            // 予期しないステータスの場合
-            Swal.fire('エラー', '予期しないステータスが返されました', 'error');
+            Swal.fire('エラー', '予期しないステータスが返されました。', 'error');
         }
     })
     .catch(error => {
         console.error('カートに追加できませんでした:', error);
-        Swal.fire('エラー', 'カートに追加できませんでした。', 'error');
+        Swal.fire('エラー', 'カートに追加できませんでした。ネットワークエラーかAPIエラーの可能性があります。', 'error');
     });
 },
 
