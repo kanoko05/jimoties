@@ -85,3 +85,16 @@ body {
 .updated {
   color: red;
 }
+
+.swal2-confirm {
+    background-color: #9370db!important; /* 紫色 */
+    color: white !important;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 18px;
+    box-shadow: none !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #9370db !important; /* ホバー時の色 */
+}
