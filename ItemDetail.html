@@ -347,32 +347,36 @@
             },
 
             addToCart() {
-                const itemNum = this.itemQuantity;
+    const itemNum = this.itemQuantity;
 
-                if (!this.item_ID) {
-                    Swal.fire('エラー', '商品IDが見つかりません。', 'error');
-                    return;
-                }
+    if (!this.item_ID) {
+        Swal.fire('エラー', '商品IDが見つかりません。', 'error');
+        return;
+    }
 
-                fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemShopList', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_ID: this.user_ID,
-                        item_ID: this.item_ID,
-                        item_num: itemNum
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
-                    Swal.fire('成功', 'カートに追加されました！', 'success');
-                })
-                .catch(error => {
-                    console.error('カートに追加できませんでした:', error);
-                    Swal.fire('エラー', 'カートに追加できませんでした。', 'error');
-                });
-            },
+    fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemShopList', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user_ID: this.user_ID,
+            item_ID: this.item_ID,
+            item_num: itemNum
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.Status === 'Error') {
+            Swal.fire('エラー', data.Message, 'error');
+        } else {
+            this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
+            Swal.fire('成功', 'カートに追加されました！', 'success');
+        }
+    })
+    .catch(error => {
+        console.error('カートに追加できませんでした:', error);
+        Swal.fire('エラー', 'カートに追加できませんでした。', 'error');
+    });
+},
 
             addToFavorite() {
                 if (!this.item_ID) {
