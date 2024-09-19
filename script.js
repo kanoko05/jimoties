@@ -20,7 +20,7 @@ new Vue({
       categories: ['カテゴリ1', 'カテゴリ2', 'カテゴリ3'],
       products: [
       { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/234.jpg', name: 'ラフテー', city: '沖縄県', price: '1500' },
-      { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/100.jpg', name: 'ワイン', city: '長野県', price: '2500' },
+      { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/188.jpg', name: '今治タオル', city: '愛媛県', price: '2000' },
       { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/161.jpg', name: 'マスカット', city: '岡山県', price: '3000' },
       { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/70.jpg', name: '箱根ビール', city: '神奈川県', price: '1300' },
       { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/34.jpg', name: '白菜', city: '福島県', price: '400' }] };
