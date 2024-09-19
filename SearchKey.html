@@ -1,14 +1,4 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>キーワード検索</title>
-  
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -83,10 +73,7 @@
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
-      position: absolute;
-      top: 10px;
-      left: 0;
-      right: 0;
+      position: relative;
       z-index: 10;
       background-color: #fff;
       padding: 10px;
@@ -121,7 +108,7 @@
       cursor: pointer;
     }
     .product-list {
-      margin-top: 180px;
+      margin-top: 20px; /* 名産品リストとリストの間隔を縮める */
     }
     .product-card {
       margin: 10px;
@@ -130,21 +117,38 @@
       border-radius: 8px;
       text-align: center;
       cursor: pointer;
-      transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* 拡大効果を追加 */
+      transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
     }
     .product-card:hover {
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      transform: scale(1.05); /* ホバー時に少し拡大 */
+      transform: scale(1.05);
     }
     .product-card img {
       max-width: 100%;
       height: auto;
       margin-bottom: 10px;
     }
-    .product-card .v-card__title,
-    .product-card .v-card__subtitle,
-    .product-card .v-card__text p {
+    .product-card .v-card__title {
       color: #7b9e7a !important;
+      text-align: center !important; /* 商品名を中央に揃える */
+      font-size: 20px; /* 文字サイズを少し大きく */
+      margin-bottom: 15px; /* 商品名と他の項目の間隔を調整 */
+      display: block; /* 確実にブロック要素として扱う */
+    }
+    .product-card .v-card__subtitle {
+      color: #7b9e7a !important;
+      font-size: 18px; /* 文字サイズを大きく */
+      margin-bottom: -10px; /* 産地と価格の間隔を狭める */
+      text-align: center; /* 産地と価格も中央に揃える */
+    }
+    /* 名産品リストのスタイル */
+    .product-list-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #7b9e7a;
+      text-align: center;
+      margin-top: 40px; /* 検索ボックスとの間隔を広げる */
+      margin-bottom: 10px; /* 名産品リストとリストの間隔を縮める */
     }
   </style>
 </head>
@@ -163,35 +167,32 @@
             <v-btn @click="goHome" text color="#7b9e7a">ホーム</v-btn>
             <v-btn @click="logout" text color="#7b9e7a">ログアウト</v-btn>
           </template>
-          <!-- userIdが存在しない場合は「ログイン」と「新規登録」のボタンを表示 -->
           <template v-else>
             <v-btn @click="goHome" text color="#7b9e7a">ホーム</v-btn>
             <v-btn @click="goLogin" text color="#7b9e7a">ログイン・新規登録</v-btn>
           </template>
-          
         </div>
       </div>
       <v-toolbar flat class="navbar">
         <template v-if="userId">
-        <v-spacer></v-spacer>
-        <v-btn class="icon-button" flat @click="goMypage">
-          <v-icon>mdi-account</v-icon>
-          <span>マイページ</span>
-        </v-btn>
-        <v-btn class="icon-button" flat @click="goFavorite">
-          <v-icon>mdi-heart</v-icon>
-          <span>お気に入り</span>
-        </v-btn>
-        <v-btn class="icon-button" flat @click="goCart">
-          <v-icon>mdi-cart</v-icon>
-          <span>カート</span>
-        </v-btn>
-      </template>
+          <v-spacer></v-spacer>
+          <v-btn class="icon-button" flat @click="goMypage">
+            <v-icon>mdi-account</v-icon>
+            <span>マイページ</span>
+          </v-btn>
+          <v-btn class="icon-button" flat @click="goFavorite">
+            <v-icon>mdi-heart</v-icon>
+            <span>お気に入り</span>
+          </v-btn>
+          <v-btn class="icon-button" flat @click="goCart">
+            <v-icon>mdi-cart</v-icon>
+            <span>カート</span>
+          </v-btn>
+        </template>
       </v-toolbar>
 
       <v-main>
         <v-container>
-          <!-- 検索ボックス -->
           <div class="search-container">
             <v-text-field
               v-model="keyword"
@@ -205,22 +206,23 @@
             <v-btn class="search-btn" @click="searchItems">検索</v-btn>
           </div>
 
-          <!-- 検索結果 -->
-          <div class="product-list">
+          <!-- 名産品リストのタイトル (検索後に表示) -->
+          <h2 v-if="products.length > 0" class="product-list-title">名産品リスト</h2>
+
+          <!-- 名産品リスト -->
+          <div class="product-list" v-if="products.length > 0">
             <v-row>
               <v-col v-for="product in products" :key="product.Item_ID" cols="12" sm="6" md="4">
                 <v-card class="product-card" @click="goToProductDetail(product.Item_name)">
                   <v-img :src="product.Item_image" height="150"></v-img>
                   <v-card-title>{{ product.Item_name }}</v-card-title>
                   <v-card-subtitle>産地: {{ product.Item_prefecture }}</v-card-subtitle>
-                  <v-card-text>
-                    <p>カテゴリー: {{ product.Item_category }}</p>
-                    <p>価格: {{ product.Item_price }}円</p>
-                  </v-card-text>
+                  <v-card-subtitle>価格: {{ product.Item_price }}円</v-card-subtitle>
                 </v-card>
               </v-col>
             </v-row>
           </div>
+
           <div v-if="message">{{ message }}</div>
         </v-container>
       </v-main>
@@ -241,7 +243,7 @@
       vuetify: new Vuetify(),
       data() {
         return {
-          userId: null, // 初期値はnull
+          userId: null,
           keyword: '',
           products: [],
           message: ''
@@ -249,20 +251,13 @@
       },
 
       mounted() {
-    //sessionStorage.setItem('user_ID', 1);
-    // sessionStorageからuser_idを取得
-    // セッションストレージからユーザーIDを取得
-    const storedUserId = sessionStorage.getItem('user_ID');
-
-    // ユーザーIDがセッションストレージに保存されていた場合
-    if (storedUserId) {
-      // 保存されていたユーザーIDを変数にセット
-      this.userId = storedUserId;
-    } else {
-      // ユーザーIDが保存されていない場合の処理（必要なら追加）
-      console.log('保存なし');
-    }
-  },
+        const storedUserId = sessionStorage.getItem('user_ID');
+        if (storedUserId) {
+          this.userId = storedUserId;
+        } else {
+          console.log('保存なし');
+        }
+      },
 
       methods: {
         goHome() {
@@ -288,8 +283,8 @@
         },
 
         logout() {
-      sessionStorage.removeItem('user_ID');
-      window.location.href = `UserLogin.html`;
+          sessionStorage.removeItem('user_ID');
+          window.location.href = `UserLogin.html`;
         },
         async searchItems() {
           try {
@@ -311,9 +306,5 @@
       }
     });
   </script>
-</body>
-</html>
-<!-- partial -->
-  
 </body>
 </html>
