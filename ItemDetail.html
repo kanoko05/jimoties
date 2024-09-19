@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>CodePen - 商品詳細</title>
+  <title>商品詳細</title>
   
 
 </head>
@@ -144,18 +144,16 @@
             gap: 20px;
         }
 
-        .cart-button,
-        .favorite-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 200px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    .cart-button, .favorite-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 5px;
+  flex-grow: 1; /* 追加 */
+}
+
 
         .cart-button {
             background-color: #ff6d00;
