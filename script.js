@@ -23,7 +23,7 @@ new Vue({
       { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/188.jpg', name: '今治タオル', city: '愛媛県', price: '2000' },
       { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/161.jpg', name: 'マスカット', city: '岡山県', price: '3000' },
       { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/70.jpg', name: '箱根ビール', city: '神奈川県', price: '1300' },
-      { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/34.jpg', name: '白菜', city: '福島県', price: '400' }] };
+      { image: 'https://m3hjimotiesphoto.blob.core.windows.net/famousphoto/9.jpg', name: 'ヨーグルト', city: '青森県', price: '600' }] };
 
 
   },
