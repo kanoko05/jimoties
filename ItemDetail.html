@@ -363,8 +363,12 @@
             item_num: itemNum
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('APIレスポンス:', response);
+        return response.json();
+    })
     .then(data => {
+        console.log('APIデータ:', data);
         if (data.Status === 'Error') {
             Swal.fire('エラー', data.Message, 'error');
         } else {
