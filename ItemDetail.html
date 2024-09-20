@@ -378,9 +378,7 @@
                 }
             },
 addToCart() {
-    // ログインしているか確認
     if (!this.user_ID) {
-        // ログインしていない場合はログインページにリダイレクト
         Swal.fire({
             title: 'ログインが必要です',
             text: 'カートに商品を追加するにはログインしてください。',
@@ -390,19 +388,19 @@ addToCart() {
             cancelButtonText: 'キャンセル'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'UserLogin.html'; // ログイン画面に遷移
+                window.location.href = 'UserLogin.html';
             }
         });
         return;
     }
 
     const itemNum = this.itemQuantity;
- 
+
     if (!this.item_ID) {
         Swal.fire('エラー', '商品IDが見つかりません。', 'error');
         return;
     }
- 
+
     fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemShopList', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -413,28 +411,22 @@ addToCart() {
         })
     })
     .then(response => {
-        console.log('APIレスポンス:', response);
- 
         if (!response.ok) {
             throw new Error(`HTTPエラー: ${response.status}`);
         }
- 
         return response.json();
     })
     .then(data => {
         console.log('APIデータ:', data);
- 
-        if (data.Status === 'Error') {
-            if (data.Message && data.Message.includes('在庫が不足しています')) {
-                Swal.fire('在庫不足', data.Message, 'warning');
-            } else {
-                Swal.fire('エラー', data.Message || '不明なエラーが発生しました。', 'error');
-            }
-        } else if (data.Status === 'Success') {
+
+        // APIレスポンスのステータスを正しく確認する
+        if (data.status === 'Success') { // 'status' フィールドを確認する
             this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
-            Swal.fire( 'カートに追加されました！', 'success');
+            Swal.fire('成功', data.message || 'カートに追加されました！', 'success');
+        } else if (data.status === 'Error') {
+            Swal.fire('エラー', data.message || '不明なエラーが発生しました。', 'error');
         } else {
-            Swal.fire('警告', '予期しないステータスが返されました。', 'warning');
+            Swal.fire('警告', '予期しないレスポンスが返されました。', 'warning');
         }
     })
     .catch(error => {
@@ -443,56 +435,59 @@ addToCart() {
     });
 },
 
-            addToFavorite() {
-                // ログインしているか確認
-                if (!this.user_ID) {
-                    // ログインしていない場合はログインページにリダイレクト
-                    Swal.fire({
-                        title: 'ログインが必要です',
-                        text: 'お気に入りに追加するにはログインしてください。',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'ログインする',
-                        cancelButtonText: 'キャンセル'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'UserLogin.html'; // ログイン画面に遷移
-                        }
-                    });
-                    return;
-                }
+addToFavorite() {
+    if (!this.user_ID) {
+        Swal.fire({
+            title: 'ログインが必要です',
+            text: 'お気に入りに追加するにはログインしてください。',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ログインする',
+            cancelButtonText: 'キャンセル'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'UserLogin.html';
+            }
+        });
+        return;
+    }
 
-                if (!this.item_ID) {
-                    Swal.fire('エラー', '商品IDが見つかりません。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
-                    return;
-                }
+    if (!this.item_ID) {
+        Swal.fire('エラー', '商品IDが見つかりません。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
+        return;
+    }
 
-                fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemFavorites', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_ID: this.user_ID,
-                        Item_ID: this.item_ID  // item_IDを使用
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('サーバーからのエラーが発生しました。ステータスコード: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === "Success") {
-                        Swal.fire( 'お気に入りに追加しました！', 'success');
-                    } else {
-                        Swal.fire('お気に入りに追加できませんでした。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('お気に入りに追加できませんでした。引き続き問題が発生する場合は管理者にお問い合わせください。', error);
-                    Swal.fire('エラー', '通信エラーが発生しました。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
-                });
-            },
+    fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemFavorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user_ID: this.user_ID,
+            Item_ID: this.item_ID
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('サーバーからのエラーが発生しました。ステータスコード: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('APIデータ:', data);
+
+        // 'status' フィールドを確認し、成功時とエラー時を区別する
+        if (data.status === "Success") {
+            Swal.fire('成功', 'お気に入りに追加しました！', 'success');
+        } else if (data.status === "Error") {
+            Swal.fire('エラー', data.message || '不明なエラーが発生しました。', 'error');
+        } else {
+            Swal.fire('警告', '予期しないレスポンスが返されました。', 'warning');
+        }
+    })
+    .catch(error => {
+        console.error('お気に入りに追加できませんでした:', error);
+        Swal.fire('エラー', '通信エラーが発生しました。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
+    });
+},
 
             getItemNameFromUrl() {
                 const params = new URLSearchParams(window.location.search);
