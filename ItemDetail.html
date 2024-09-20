@@ -9,6 +9,16 @@
 <body>
 <!-- partial:index.partial.html -->
 <!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>商品詳細</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -64,24 +74,25 @@
             padding: 8px 16px;
         }
 
-        .cart-icon {
-            position: relative;
-            display: inline-block;
-        }
+       .cart-icon {
+    position: relative;  /* バッジの位置をカートアイコンに対して相対的に配置 */
+    display: inline-block;  /* カートアイコン自体をインラインブロックにして相対的な配置が適用されるようにする */
+}
 
-        .cart-badge {
-            position: absolute;
-            top: -20px;
-            right: -25px;
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            padding: 4px 8px;
-            font-size: 12px;
-            font-weight: bold;
-            min-width: 20px;
-            text-align: center;
-        }
+.cart-badge {
+    position: absolute; /* 親要素（カートアイコン）の相対位置に対してバッジを配置 */
+    top: -20px;         /* カートアイコンの上にバッジを表示 */
+    right: -25px;       /* カートアイコンの右にバッジを表示 */
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 20px;
+    text-align: center;
+}
+
 
         .breadcrumb {
             margin: 20px;
@@ -185,6 +196,23 @@
         .favorite-button i {
             vertical-align: middle;
         }
+      
+    .return-button {
+    background-color: #ff0000 !important;  /* 背景をオレンジに */
+    color: white !important;               /* テキストの色を白に */
+    border-radius: 8px !important;         /* 角を丸くする */
+    padding: 10px 20px !important;         /* パディングを適用 */
+    font-size: 16px !important;            /* テキストサイズを強制適用 */
+}
+
+.return-button:hover {
+    background-color: #ff0000 !important;  /* ホバー時の背景色を変更 */
+}
+
+.return-button i {
+    margin-right: 8px !important;  /* アイコンに右側の余白を追加 */
+}
+
          
         .swal2-confirm {
     background-color: #9370db!important; /* 紫色 */
@@ -218,7 +246,14 @@
         </div>
         <!-- ナビゲーションバー -->
           <!-- ナビゲーションバー -->
-<v-toolbar flat class="navbar">
+<!-- ナビゲーションバー -->
+<v-toolbar flat elevation="0" class="navbar">
+    <!-- 戻るボタンを追加 -->
+    <v-btn class="icon-button return-button" flat @click="goBack"> <!-- 修正箇所: クラスに "return-button" を追加 -->
+    <span>戻る</span> <!-- 文言を変更 -->
+</v-btn>
+
+    
     <v-spacer></v-spacer>
     <v-btn class="icon-button" flat @click="goToMypage"> <!-- マイページに遷移 -->
         <v-icon>mdi-account</v-icon>
@@ -228,10 +263,17 @@
         <v-icon>mdi-heart</v-icon>
         <span>お気に入り</span>
     </v-btn>
-    <v-btn class="icon-button" flat @click="goToCart"> <!-- カートに遷移 -->
-        <v-icon>mdi-cart</v-icon>
-        <span>カート</span>
-    </v-btn>
+   <!-- カートアイコンとバッジ -->
+<!-- カートアイコンとバッジ -->
+<v-btn class="icon-button cart-icon" flat @click="goToCart">
+    <v-icon>mdi-cart</v-icon>
+    <span>カート</span>
+
+    <!-- 数量がゼロの場合はバッジを表示しない -->
+    <div v-if="cartQuantity > 0" class="cart-badge">{{ cartQuantity }}</div> <!-- バッジ内にカートの数量を表示 -->
+</v-btn>
+
+
 </v-toolbar>
 
         <!-- メインコンテンツ -->
@@ -337,46 +379,101 @@
                         this.item_ID = itemData.Item_ID;
                         console.log('取得した商品ID:', this.item_ID);
                     } else {
-                        console.error('商品データが見つかりません。', response.data);
-                        Swal.fire('エラー', '商品情報が見つかりません。', 'error');
+                        console.error('商品データが見つかりません。引き続き問題が発生する場合は管理者にお問い合わせください。', response.data);
+                        Swal.fire('エラー', '商品情報が見つかりません。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
                     }
                 } catch (error) {
-                    console.error('商品の取得に失敗しました:', error);
-                    Swal.fire('エラー', '商品の取得に失敗しました。', 'error');
+                    console.error('商品の取得に失敗しました。引き続き問題が発生する場合は管理者にお問い合わせください。', error);
+                    Swal.fire('エラー', '商品の取得に失敗しました。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
                 }
             },
+addToCart() {
+    // ログインしているか確認
+    if (!this.user_ID) {
+        // ログインしていない場合はログインページにリダイレクト
+        Swal.fire({
+            title: 'ログインが必要です',
+            text: 'カートに商品を追加するにはログインしてください。',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ログインする',
+            cancelButtonText: 'キャンセル'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'UserLogin.html'; // ログイン画面に遷移
+            }
+        });
+        return;
+    }
 
-            addToCart() {
-                const itemNum = this.itemQuantity;
+    const itemNum = this.itemQuantity;
+ 
+    if (!this.item_ID) {
+        Swal.fire('エラー', '商品IDが見つかりません。', 'error');
+        return;
+    }
+ 
+    fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemShopList', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user_ID: this.user_ID,
+            item_ID: this.item_ID,
+            item_num: itemNum
+        })
+    })
+    .then(response => {
+        console.log('APIレスポンス:', response);
+ 
+        if (!response.ok) {
+            throw new Error(`HTTPエラー: ${response.status}`);
+        }
+ 
+        return response.json();
+    })
+    .then(data => {
+        console.log('APIデータ:', data);
+ 
+        if (data.Status === 'Error') {
+            if (data.Message && data.Message.includes('在庫が不足しています')) {
+                Swal.fire('在庫不足', data.Message, 'warning');
+            } else {
+                Swal.fire('エラー', data.Message || '不明なエラーが発生しました。', 'error');
+            }
+        } else if (data.Status === 'Success') {
+            this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
+            Swal.fire( 'カートに追加されました！', 'success');
+        } else {
+            Swal.fire('警告', '予期しないステータスが返されました。', 'warning');
+        }
+    })
+    .catch(error => {
+        console.error('カートに追加できませんでした:', error);
+        Swal.fire('エラー', 'カートに追加できませんでした。', 'error');
+    });
+},
 
-                if (!this.item_ID) {
-                    Swal.fire('エラー', '商品IDが見つかりません。', 'error');
+            addToFavorite() {
+                // ログインしているか確認
+                if (!this.user_ID) {
+                    // ログインしていない場合はログインページにリダイレクト
+                    Swal.fire({
+                        title: 'ログインが必要です',
+                        text: 'お気に入りに追加するにはログインしてください。',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'ログインする',
+                        cancelButtonText: 'キャンセル'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'UserLogin.html'; // ログイン画面に遷移
+                        }
+                    });
                     return;
                 }
 
-                fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/AddItemShopList', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_ID: this.user_ID,
-                        item_ID: this.item_ID,
-                        item_num: itemNum
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
-                    Swal.fire('成功', 'カートに追加されました！', 'success');
-                })
-                .catch(error => {
-                    console.error('カートに追加できませんでした:', error);
-                    Swal.fire('エラー', 'カートに追加できませんでした。', 'error');
-                });
-            },
-
-            addToFavorite() {
                 if (!this.item_ID) {
-                    Swal.fire('エラー', '商品IDが見つかりません。', 'error');
+                    Swal.fire('エラー', '商品IDが見つかりません。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
                     return;
                 }
 
@@ -396,14 +493,14 @@
                 })
                 .then(data => {
                     if (data.status === "Success") {
-                        Swal.fire('成功', 'お気に入りに追加しました！', 'success');
+                        Swal.fire( 'お気に入りに追加しました！', 'success');
                     } else {
-                        Swal.fire('エラー', 'お気に入りに追加できませんでした。', 'error');
+                        Swal.fire('お気に入りに追加できませんでした。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
                     }
                 })
                 .catch(error => {
-                    console.error('お気に入りに追加できませんでした:', error);
-                    Swal.fire('エラー', '通信エラーが発生しました。', 'error');
+                    console.error('お気に入りに追加できませんでした。引き続き問題が発生する場合は管理者にお問い合わせください。', error);
+                    Swal.fire('エラー', '通信エラーが発生しました。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
                 });
             },
 
@@ -411,8 +508,8 @@
                 const params = new URLSearchParams(window.location.search);
                 const name = params.get('name');
                 if (!name) {
-                    console.error('商品名がURLから取得できません。');
-                    Swal.fire('エラー', '商品名が見つかりません。', 'error');
+                    console.error('商品名がURLから取得できません。引き続き問題が発生する場合は管理者にお問い合わせください。');
+                    Swal.fire('エラー', '商品名が見つかりません。引き続き問題が発生する場合は管理者にお問い合わせください。', 'error');
                 }
                 return name;
             },
@@ -421,10 +518,14 @@
                 return sessionStorage.getItem('user_ID') || null; // 必要に応じてnullに修正
             },
 
-           goToFavorites() {
-            // お気に入りページに遷移
-            window.location.href = 'Favorite.html';
-        },
+          goBack() {
+        window.history.back(); // ブラウザの戻る操作
+    },
+       
+            goToFavorites() {
+                // お気に入りページに遷移
+                window.location.href = 'Favorite.html';
+            },
           
             goToHome() {
                 window.location.href = 'index.html';
@@ -439,7 +540,7 @@
             },
 
             goToCart() {
-                window.location.href = 'Shoplist..html';
+                window.location.href = 'Shoplist.html';
             },
 
             adminLogin() {
@@ -451,6 +552,12 @@
         }
     });
 </script>
+
+
+</body>
+</html>
+<!-- partial -->
+  
 </body>
 </html>
 <!-- partial -->
