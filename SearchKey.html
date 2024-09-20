@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ジモティーズ - キーワード検索</title>
+  <title>キーワード検索</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://unpkg.com/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://unpkg.com/vuetify@2.7.1/dist/vuetify.min.css" rel="stylesheet">
@@ -217,7 +217,7 @@
                   <v-img :src="product.Item_image" height="150"></v-img>
                   <v-card-title>{{ product.Item_name }}</v-card-title>
                   <v-card-subtitle>産地: {{ product.Item_prefecture }}</v-card-subtitle>
-                  <v-card-subtitle>価格: {{ product.Item_price }}円</v-card-subtitle>
+                  <v-card-subtitle>{{ product.Item_price }}円</v-card-subtitle>
                 </v-card>
               </v-col>
             </v-row>

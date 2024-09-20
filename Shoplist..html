@@ -411,10 +411,57 @@
           }
         },
 
-        deleteSelected() {
-          this.desserts = this.desserts.filter(item => !this.selectedItems.includes(item));
-          this.selectedItems = [];
-          this.calculateTotalPrice();
+        async deleteSelected() {
+        console.log('ready Deleting:', this.selectedItems);
+          const functionUrl = 'https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItemShopList';
+          
+          try {
+            console.log('Deleting selected items:', this.selectedItems);
+            
+            for (let item of this.selectedItems) {
+              // item_IDが数値であることを確認
+      console.log(`Processing item ${item.Item_ID}, type: ${typeof item.Item_ID}`);
+              const response = await fetch(functionUrl, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  user_ID: this.userID,
+                  item_ID: item.Item_ID
+                })
+              });
+              
+              
+              console.log(`Response status for item ${item.Item_ID}: ${response.status}`);
+              if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`HTTP error! Status: ${response.status}, Text: ${errorText}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+
+              const result = await response.json();
+              console.log(`Full result for item ${item.Item_ID}:`, result); // レスポンス全体を出力
+
+              // ここでresult.Statusが正しく取得できているか確認
+              if (result.status === 'Success') {
+                // 削除に成功した場合の処理
+                this.desserts = this.desserts.filter(dessert => dessert.Item_ID !== item.Item_ID);
+                this.desserts = [...this.desserts]; // 画面を更新するために再代入
+                alert(`${item.Item_name}が削除されました。`);
+              } else {
+                console.error(`削除APIは成功しましたが、ステータスが'${result.status}'となっています。`);
+                alert('削除に失敗しました。');
+              }
+            }
+            
+            this.selectedItems = [];
+            this.calculateTotalPrice();
+            
+          } catch (error) {
+            console.error('削除中にエラーが発生しました:', error);
+            alert('削除中にエラーが発生しました。');
+          }
         },
 
         updateSelectedItems(item) {

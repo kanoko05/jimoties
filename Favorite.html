@@ -87,7 +87,7 @@
 
         <!-- 合計金額のバーの下にボタンを追加 -->
         <v-container class="text-center" style="padding: 16px;">
-          <v-btn class="custom-back-btn" style="background-color: red; color: white; margin-right: 10px;" @click="goBack">
+          <v-btn class="custom-back-btn" style="background-color: red; color: white; margin-right: 10px;" @click="goHome">
             ホームに戻る
           </v-btn>
           <v-btn class="custom-purchase-btn" style="background-color: #7b9e7a; color: white;" @click="confirmAdd">
@@ -483,10 +483,7 @@
           sessionStorage.removeItem('user_ID');
         },
 
-        goBack() {
-          window.history.back();
-        }
-      }
+              }
     });
   </script>
 </body>
