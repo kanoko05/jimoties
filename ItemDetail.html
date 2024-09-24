@@ -238,33 +238,34 @@
         <!-- ナビゲーションバー -->
           <!-- ナビゲーションバー -->
 <!-- ナビゲーションバー -->
+<!-- ナビゲーションバー -->
 <v-toolbar flat elevation="0" class="navbar">
     <!-- 戻るボタンを追加 -->
     <v-btn class="icon-button return-button" flat @click="goBack"> <!-- 修正箇所: クラスに "return-button" を追加 -->
     <span>戻る</span> <!-- 文言を変更 -->
 </v-btn>
 
-    
     <v-spacer></v-spacer>
-    <v-btn class="icon-button" flat @click="goToMypage"> <!-- マイページに遷移 -->
-        <v-icon>mdi-account</v-icon>
-        <span>マイページ</span>
-    </v-btn>
-    <v-btn class="icon-button" flat @click="goToFavorites"> <!-- お気に入りに遷移 -->
-        <v-icon>mdi-heart</v-icon>
-        <span>お気に入り</span>
-    </v-btn>
-   <!-- カートアイコンとバッジ -->
-<!-- カートアイコンとバッジ -->
-<v-btn class="icon-button cart-icon" flat @click="goToCart">
-    <v-icon>mdi-cart</v-icon>
-    <span>カート</span>
 
-    <!-- 数量がゼロの場合はバッジを表示しない -->
-    <div v-if="cartQuantity > 0" class="cart-badge">{{ cartQuantity }}</div> <!-- バッジ内にカートの数量を表示 -->
-</v-btn>
+    <!-- user_IDが存在する場合のみ以下のボタンを表示 -->
+    <template v-if="user_ID">
+        <v-btn class="icon-button" flat @click="goToMypage"> <!-- マイページに遷移 -->
+            <v-icon>mdi-account</v-icon>
+            <span>マイページ</span>
+        </v-btn>
+        <v-btn class="icon-button" flat @click="goToFavorites"> <!-- お気に入りに遷移 -->
+            <v-icon>mdi-heart</v-icon>
+            <span>お気に入り</span>
+        </v-btn>
+        <!-- カートアイコンとバッジ -->
+        <v-btn class="icon-button cart-icon" flat @click="goToCart">
+            <v-icon>mdi-cart</v-icon>
+            <span>カート</span>
 
-
+            <!-- 数量がゼロの場合はバッジを表示しない -->
+            <div v-if="cartQuantity > 0" class="cart-badge">{{ cartQuantity }}</div> <!-- バッジ内にカートの数量を表示 -->
+        </v-btn>
+    </template>
 </v-toolbar>
 
         <!-- メインコンテンツ -->
