@@ -422,10 +422,15 @@ addToCart() {
         console.log('APIデータ:', data);
 
         // APIレスポンスのステータスを正しく確認する
-        if (data.status === 'Success') { // 'status' フィールドを確認する
-            this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
-            Swal.fire('成功', data.message || 'カートに追加されました！', 'success');
-        } else if (data.status === 'Error') {
+       // APIレスポンスのステータスを正しく確認する
+if (data.status === 'Success') { // 'status' フィールドを確認する
+    this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
+    Swal.fire({
+        text: data.message || 'カートに追加されました！',
+        icon: 'success'
+    });
+}
+ else if (data.status === 'Error') {
             Swal.fire('エラー', data.message || '不明なエラーが発生しました。', 'error');
         } else {
             Swal.fire('警告', '予期しないレスポンスが返されました。', 'warning');
@@ -478,7 +483,7 @@ addToFavorite() {
 
         // 'status' フィールドを確認し、成功時とエラー時を区別する
         if (data.status === "Success") {
-            Swal.fire('成功', 'お気に入りに追加しました！', 'success');
+            Swal.fire('お気に入りに登録されました！', 'success');
         } else if (data.status === "Error") {
             Swal.fire('エラー', data.message || '不明なエラーが発生しました。', 'error');
         } else {
