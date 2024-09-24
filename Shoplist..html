@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>カート</title>
-  
-
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -67,7 +65,11 @@
                 <td>
                   <img :src="item.Item_image || 'https://via.placeholder.com/100'" alt="商品画像" width="100" />
                 </td>
-                <td>{{ item.Item_name }}</td>
+                <td>
+                  <a href="#" @click.prevent="goToItemDetail(item.Item_name)" style="cursor: pointer; color: #7b9e7a;">
+                    {{ item.Item_name }}
+                  </a>
+                </td>
                 <td>{{ item.Item_prefecture }}</td>
                 <td>
                   <v-btn icon @click="updateItemQuantity(item, -1)">
@@ -111,6 +113,7 @@
   </div>
 
   <style>
+    /* スタイルはそのまま保持 */
     .header {
       background-color: #f5f5f5;
       padding: 10px;
@@ -483,15 +486,10 @@
           window.location.href = 'index.html';
         },
 
-        goLogin() {
-          window.location.href = 'UserLogin.html';
+        goToItemDetail(itemName) {
+          window.location.href = `ItemDetail.html?name=${encodeURIComponent(itemName)}`;
         },
 
-        goRegister() {
-          window.location.href = 'UserLogin.html';
-        },
-
-        
         goOrder() {
           window.location.href = 'Order.html';
         },
@@ -499,10 +497,11 @@
         goAdminLogin() {
           window.location.href = 'EmployeeLogin.html';
         },
+
         logout() {
-      sessionStorage.removeItem('user_ID');
-      window.location.href = `UserLogin.html`;
-    },
+          sessionStorage.removeItem('user_ID');
+          window.location.href = `UserLogin.html`;
+        },
       },
 
       watch: {
@@ -512,8 +511,5 @@
   </script>
 </body>
 </html>
-<!-- partial -->
-  
-</body>
-</html>
+
 
