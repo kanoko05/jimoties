@@ -74,6 +74,9 @@ function showMessage(message, backgroundColor) {
 
 // アカウント作成機能
 async function register() {
+  const spinner = document.getElementById("loadingSpinner");
+  spinner.style.display = "block";
+
  const user_name = document.getElementById("user_name").value;
  const user_password = document.getElementById("user_password").value;
  const mail = document.getElementById("mail").value;
