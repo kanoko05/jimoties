@@ -108,7 +108,7 @@
       cursor: pointer;
     }
     .product-list {
-      margin-top: 20px; /* 名産品リストとリストの間隔を縮める */
+      margin-top: 20px;
     }
     .product-card {
       margin: 10px;
@@ -130,25 +130,30 @@
     }
     .product-card .v-card__title {
       color: #7b9e7a !important;
-      text-align: center !important; /* 商品名を中央に揃える */
-      font-size: 20px; /* 文字サイズを少し大きく */
-      margin-bottom: 15px; /* 商品名と他の項目の間隔を調整 */
-      display: block; /* 確実にブロック要素として扱う */
+      text-align: center !important;
+      font-size: 20px;
+      margin-bottom: 15px;
+      display: block;
     }
     .product-card .v-card__subtitle {
       color: #7b9e7a !important;
-      font-size: 18px; /* 文字サイズを大きく */
-      margin-bottom: -10px; /* 産地と価格の間隔を狭める */
-      text-align: center; /* 産地と価格も中央に揃える */
+      font-size: 18px;
+      text-align: center;
     }
-    /* 名産品リストのスタイル */
     .product-list-title {
       font-size: 20px;
       font-weight: bold;
       color: #7b9e7a;
       text-align: center;
-      margin-top: 40px; /* 検索ボックスとの間隔を広げる */
-      margin-bottom: 10px; /* 名産品リストとリストの間隔を縮める */
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+    /* ソートセレクトボックスの幅調整と位置の調整 */
+    .sort-select {
+      width: 200px;
+      margin-right: auto;
+      margin-left: auto;
+      margin-top: 50px; /* ここで位置を調整 */
     }
   </style>
 </head>
@@ -206,18 +211,30 @@
             <v-btn class="search-btn" @click="searchItems">検索</v-btn>
           </div>
 
-          <!-- 名産品リストのタイトル (検索後に表示) -->
+          <!-- ソート機能の追加 -->
+          <div v-if="products.length > 0" class="sort-container" style="text-align: center; margin-top: 10px;">
+            <v-select
+              class="sort-select"
+              v-model="sortOption"
+              :items="sortOptions"
+              label="金額順"
+              hide-details
+              dense
+            ></v-select>
+          </div>
+
+          <!-- 名産品リストのタイトル -->
           <h2 v-if="products.length > 0" class="product-list-title">名産品リスト</h2>
 
           <!-- 名産品リスト -->
           <div class="product-list" v-if="products.length > 0">
             <v-row>
-              <v-col v-for="product in products" :key="product.Item_ID" cols="12" sm="6" md="4">
-                <v-card class="product-card" @click="goToProductDetail(product.Item_name)">
-                  <v-img :src="product.Item_image" height="150"></v-img>
-                  <v-card-title>{{ product.Item_name }}</v-card-title>
-                  <v-card-subtitle>産地: {{ product.Item_prefecture }}</v-card-subtitle>
-                  <v-card-subtitle>{{ product.Item_price }}円</v-card-subtitle>
+              <v-col v-for="product in products" :key="product.id" cols="12" sm="6" md="4">
+                <v-card class="product-card" @click="goToProductDetail(product.name)">
+                  <v-img :src="product.image" height="150"></v-img>
+                  <v-card-title>{{ product.name }}</v-card-title>
+                  <v-card-subtitle>産地: {{ product.region }}</v-card-subtitle>
+                  <v-card-subtitle>{{ product.price ? product.price + '円' : '未設定' }}</v-card-subtitle>
                 </v-card>
               </v-col>
             </v-row>
@@ -246,7 +263,12 @@
           userId: null,
           keyword: '',
           products: [],
-          message: ''
+          message: '',
+          sortOption: null,  // ソートオプション
+          sortOptions: [
+            { text: '金額が低い順', value: 'priceAsc' },
+            { text: '金額が高い順', value: 'priceDesc' }
+          ],
         };
       },
 
@@ -256,6 +278,16 @@
           this.userId = storedUserId;
         } else {
           console.log('保存なし');
+        }
+      },
+
+      watch: {
+        sortOption(newValue) {
+          if (newValue === 'priceAsc') {
+            this.products.sort((a, b) => a.price - b.price);
+          } else if (newValue === 'priceDesc') {
+            this.products.sort((a, b) => b.price - a.price);
+          }
         }
       },
 
@@ -286,13 +318,20 @@
           sessionStorage.removeItem('user_ID');
           window.location.href = `UserLogin.html`;
         },
+
         async searchItems() {
           try {
             const response = await axios.get('https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName', {
               params: { Item_name: this.keyword }
             });
             if (response.data && response.data.ItemTableList && response.data.ItemTableList.length > 0) {
-              this.products = response.data.ItemTableList;
+              this.products = response.data.ItemTableList.map(product => ({
+                id: product.Item_ID,
+                name: product.Item_name,
+                price: product.Item_price || '未設定',
+                image: product.Item_image || 'https://via.placeholder.com/150',  // デフォルト画像
+                region: product.Item_prefecture
+              }));
               this.message = '';
             } else {
               this.message = '一致する商品がありません';
