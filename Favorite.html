@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>お気に入り</title>
-  
-
 </head>
 <body>
 <!-- partial:index.partial.html -->
@@ -77,7 +75,10 @@
                 <td>
                   <img :src="item.Item_image" alt="商品画像" width="100" />
                 </td>
-                <td>{{ item.Item_name }}</td>
+                <td>
+                  <!-- 商品名をリンクにして商品詳細ページに飛ぶ -->
+                  <a :href="`ItemDetail.html?name=${encodeURIComponent(item.Item_name)}`">{{ item.Item_name }}</a>
+                </td>
                 <td>{{ item.Item_prefecture }}</td>
                 <td>{{ item.Item_price }}円</td>
               </tr>
@@ -270,7 +271,7 @@
       padding: 10px 20px !important; /* ボタンのパディングを調整 */
       margin: 50px;
       background-color: red !important; /* ボタンの背景色を赤に変更 */
-      color: white !important; /* ボタンの文字色を白に設定 */
+      color: white !重要と設定 */
     }
   </style>
 
@@ -486,9 +487,5 @@
               }
     });
   </script>
-</body>
-</html>
-<!-- partial -->
-  
 </body>
 </html>
