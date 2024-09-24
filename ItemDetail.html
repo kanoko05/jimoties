@@ -426,9 +426,11 @@ addToCart() {
 if (data.status === 'Success') { // 'status' フィールドを確認する
     this.cartQuantity = parseInt(this.cartQuantity) + parseInt(itemNum);
     Swal.fire({
-        text: data.message || 'カートに追加されました！',
-        icon: 'success'
-    });
+    html: '<strong>カートに追加されました！</strong>',
+    icon: 'success',
+    showCancelButton: false,
+    confirmButtonText: 'OK',
+});
 }
  else if (data.status === 'Error') {
             Swal.fire('エラー', data.message || '不明なエラーが発生しました。', 'error');
@@ -483,7 +485,12 @@ addToFavorite() {
 
         // 'status' フィールドを確認し、成功時とエラー時を区別する
         if (data.status === "Success") {
-            Swal.fire('お気に入りに登録されました！', 'success');
+            Swal.fire({
+    html: '<strong>お気に入りに登録されました！</strong>',
+    icon: 'success',
+    showCancelButton: false,
+    confirmButtonText: 'OK',
+});
         } else if (data.status === "Error") {
             Swal.fire('エラー', data.message || '不明なエラーが発生しました。', 'error');
         } else {
