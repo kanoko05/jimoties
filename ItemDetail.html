@@ -216,6 +216,11 @@
 .swal2-confirm:hover {
     background-color: #9370db !important; /* ホバー時の色 */
 }
+
+.swal2-cancel {
+    color: white !important;  /* 文字色を白に変更 */
+}
+
     </style>
 </head>
 <body>
@@ -387,7 +392,10 @@ addToCart() {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'ログインする',
-            cancelButtonText: 'キャンセル'
+            cancelButtonText: 'キャンセル',
+            customClass: {
+        cancelButton: 'swal2-cancel'  // キャンセルボタン用のクラスを設定
+    }
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = 'UserLogin.html';
@@ -452,7 +460,10 @@ addToFavorite() {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'ログインする',
-            cancelButtonText: 'キャンセル'
+            cancelButtonText: 'キャンセル',
+　　　　　  customClass: {
+        cancelButton: 'swal2-cancel'  // キャンセルボタン用のクラスを設定
+    }
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = 'UserLogin.html';
@@ -494,7 +505,7 @@ addToFavorite() {
         } else if (data.status === "Error") {
             Swal.fire('エラー', data.message || '不明なエラーが発生しました。', 'error');
         } else {
-            Swal.fire('警告', '予期しないレスポンスが返されました。', 'warning');
+            Swal.fire('警告', '既にお気に入り登録済みです', 'warning');
         }
     })
     .catch(error => {
