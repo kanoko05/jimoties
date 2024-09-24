@@ -9,25 +9,14 @@
 </head>
 <body>
   <div id="app">
-    <v-app style="background-color: white;">
-      <div class="header">
-        <div class="header-left">
-          <div class="header-title">
-            <v-icon class="mdi-icon">mdi-home-city-outline</v-icon>
-            ジモティーズ
-          </div>
-        </div>
-        <div class="header-right">
-          <v-btn text color="#7b9e7a" @click="goHome">ホーム</v-btn>
-          <v-btn @click="logout" text color="#7b9e7a">ログアウト</v-btn>
-        </div>
-      </div>
-      <!-- 題名バー -->
-      <v-app-bar color="#7b9e7a" dark dense class="custom-app-bar">
-        <v-toolbar-title style="font-size: 20px;">カート</v-toolbar-title>
+    <v-app>
+      <v-app-bar color="#7b9e7a" dark dense>
+        <v-toolbar-title style="font-size: 20px;">ジモティーズ</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn text color="#fff" @click="goHome">ホーム</v-btn>
+        <v-btn text color="#fff" @click="logout">ログアウト</v-btn>
       </v-app-bar>
-      <br><br>
-      <!-- メインコンテンツ -->
+      
       <v-main>
         <v-container class="v-container-main" style="background-color: white;">
           <v-data-table
@@ -58,7 +47,6 @@
                   <img :src="item.Item_image || 'https://via.placeholder.com/100'" alt="商品画像" width="100" />
                 </td>
                 <td>
-                  <!-- 商品名をクリックすると商品詳細ページに遷移 -->
                   <a href="#" @click.prevent="goToItemDetail(item.Item_name)" style="cursor: pointer; color: #7b9e7a;">
                     {{ item.Item_name }}
                   </a>
@@ -77,7 +65,6 @@
               </tr>
             </template>
 
-            <!-- カスタムフッターで合計金額を表示 -->
             <template v-slot:body.append>
               <tr>
                 <td colspan="6" class="total-amount-large" style="text-align: center;">合計金額: {{ totalPrice }} 円</td>
@@ -86,7 +73,6 @@
           </v-data-table>
         </v-container>
 
-        <!-- 合計金額のバーの下にボタンを追加 -->
         <v-container class="text-center" style="padding: 16px;">
           <v-btn class="custom-back-btn" style="background-color: red; color: white; margin-right: 10px;" @click="goHome">
             ホームに戻る
@@ -97,7 +83,6 @@
         </v-container>
       </v-main>
 
-      <!-- フッター -->
       <v-footer class="footer">
         &copy; 2024 ジモティーズ. All rights reserved.
         <v-btn text class="admin-login-btn" @click="goAdminLogin">管理者はこちらから</v-btn>
@@ -106,7 +91,33 @@
   </div>
 
   <style>
-    /* Styles remain the same */
+    /* ヘッダーと他の部分のスタイル調整 */
+    .v-app-bar {
+      max-height: 64px; /* ヘッダーの高さを調整 */
+    }
+    .header {
+      background-color: #7b9e7a;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-title {
+      font-family: 'serif';
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .footer {
+      background-color: #e0f0e6;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #7b9e7a;
+      font-size: 14px;
+      height: 75px;
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
@@ -119,7 +130,7 @@
       data() {
         return {
           headers: [
-            { text: '', value: 'isSelected' }, // チェックボックス用
+            { text: '', value: 'isSelected' },
             { text: '商品画像', value: 'img' },
             { text: '商品名', value: 'name' },
             { text: '産地', value: 'prefecture' },
@@ -127,10 +138,10 @@
             { text: '金額', value: 'price' }
           ],
           itemsPerPage: 10,
-          desserts: [], // 初期値は空の配列
-          selectedItems: [], // 選択されたアイテムの配列
-          totalPrice: 0, // 合計金額を保持する変数
-          userID: null, // 初期値をnullに設定してデフォルトを持たせない
+          desserts: [],
+          selectedItems: [],
+          totalPrice: 0,
+          userID: null,
         };
       },
 
@@ -138,133 +149,58 @@
         const storedUserID = sessionStorage.getItem('user_ID');
         if (storedUserID) {
             this.userID = parseInt(storedUserID, 10);
-            console.log('取得したユーザーID:', this.userID);
             this.fetchshoplist();
         } else {
             alert('ユーザーIDが指定されていません。ログインが必要です。');
-            console.error('セッションストレージにユーザーIDが存在しません。');
             window.location.href = 'UserLogin.html';
         }
       },
 
       methods: {
         async fetchshoplist() {
-          console.log("データ取得開始：", "User_ID:", this.userID);
           const param = { User_ID: this.userID };
-
           try {
-              console.log(`APIに送信するリクエストパラメータ:`, param);
-              const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param, {
-                  headers: { 'Cache-Control': 'no-cache' }
-              });
-
+              const response = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/ListShoplist', param);
               if (response.data && response.data.ShoplistList) {
-                  this.desserts = response.data.ShoplistList; 
+                  this.desserts = response.data.ShoplistList;
                   const fetchItemData = this.desserts.map(async item => {
                       const param2 = { Item_ID: item.Item_ID };
-                      try {
-                          const response2 = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemId', param2);
-                          if (response2.data && response2.data.ItemTableList && response2.data.ItemTableList.length > 0) {
-                              const itemData = response2.data.ItemTableList[0];
-                              item.Item_name = itemData.Item_name || "不明";
-                              item.Item_prefecture = itemData.Item_prefecture || "不明";
-                              item.Item_price = itemData.Item_price || 0;
-                              item.Item_image = itemData.Item_image || "https://via.placeholder.com/100";
-                          }
-                      } catch (error) {
-                          console.error(`Item_ID ${item.Item_ID} のデータ取得に失敗しました:`, error);
+                      const response2 = await axios.post('https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemId', param2);
+                      if (response2.data && response2.data.ItemTableList && response2.data.ItemTableList.length > 0) {
+                          const itemData = response2.data.ItemTableList[0];
+                          item.Item_name = itemData.Item_name || "不明";
+                          item.Item_prefecture = itemData.Item_prefecture || "不明";
+                          item.Item_price = itemData.Item_price || 0;
+                          item.Item_image = itemData.Item_image || "https://via.placeholder.com/100";
                       }
                   });
                   await Promise.all(fetchItemData);
                   this.calculateTotalPrice();
-              } else {
-                  console.error('レスポンスの形式が予想外です:', response);
               }
           } catch (error) {
               console.error('データの取得に失敗しました:', error);
           }
         },
 
-        async updateItemQuantity(item, quantityChange) {
+        updateItemQuantity(item, quantityChange) {
           const newQuantity = item.Item_num + quantityChange;
           if (newQuantity <= 0) {
             alert('数量は1以上でなければなりません。');
             return;
           }
-
           const params = {
             user_ID: this.userID,
             item_ID: item.Item_ID,
             item_num: newQuantity,
           };
-
-          try {
-            const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItemShopList', params);
-            if (response.status === 200) {
+          axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItemShopList', params)
+            .then(() => {
               item.Item_num = newQuantity;
               this.calculateTotalPrice();
-            } else {
+            })
+            .catch(() => {
               alert('数量の更新に失敗しました。もう一度お試しください。');
-            }
-          } catch (error) {
-            console.error('数量の更新エラー:', error);
-            alert('数量の更新に失敗しました。もう一度お試しください。');
-          }
-        },
-
-        confirmDelete() {
-          if (this.selectedItems.length === 0) {
-            alert('削除するアイテムを選択してください。');
-            return;
-          }
-          if (confirm('選択した商品を削除しますか？')) {
-            this.deleteSelected();
-          }
-        },
-
-        async deleteSelected() {
-          const functionUrl = 'https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItemShopList';
-          try {
-            for (let item of this.selectedItems) {
-              const response = await fetch(functionUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  user_ID: this.userID,
-                  item_ID: item.Item_ID
-                })
-              });
-
-              if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-
-              const result = await response.json();
-              if (result.status === 'Success') {
-                this.desserts = this.desserts.filter(dessert => dessert.Item_ID !== item.Item_ID);
-                this.desserts = [...this.desserts];
-                alert(`${item.Item_name}が削除されました。`);
-              } else {
-                alert('削除に失敗しました。');
-              }
-            }
-            this.selectedItems = [];
-            this.calculateTotalPrice();
-          } catch (error) {
-            console.error('削除中にエラーが発生しました:', error);
-            alert('削除中にエラーが発生しました。');
-          }
-        },
-
-        updateSelectedItems(item) {
-          if (item.isSelected) {
-            this.selectedItems.push(item);
-          } else {
-            const index = this.selectedItems.indexOf(item);
-            if (index > -1) {
-              this.selectedItems.splice(index, 1);
-            }
-          }
+            });
         },
 
         calculateTotalPrice() {
@@ -300,4 +236,5 @@
   </script>
 </body>
 </html>
+
 
