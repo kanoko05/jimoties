@@ -15,12 +15,12 @@
       justify-content: space-between;
       align-items: center;
     }
-     .header-subtitle {
-       font-family: 'serif';
-       font-size: 16px;
-       font-weight: normal;
-       color: #7b9e7a;
-       margin-left: 10px;
+    .header-subtitle {
+      font-family: 'serif';
+      font-size: 16px;
+      font-weight: normal;
+      color: #7b9e7a;
+      margin-left: 10px;
     }
     .header-left {
       display: flex;
@@ -155,12 +155,11 @@
       margin-top: 40px;
       margin-bottom: 10px;
     }
-    /* ソートセレクトボックスの幅調整と位置の調整 */
     .sort-select {
       width: 200px;
       margin-right: auto;
       margin-left: auto;
-      margin-top: 50px; /* ここで位置を調整 */
+      margin-top: 50px;
     }
   </style>
 </head>
@@ -225,7 +224,7 @@
               class="sort-select"
               v-model="sortOption"
               :items="sortOptions"
-              label="金額順"
+              label="並び替え"
               hide-details
               dense
             ></v-select>
@@ -275,7 +274,8 @@
           sortOption: null,  // ソートオプション
           sortOptions: [
             { text: '金額が低い順', value: 'priceAsc' },
-            { text: '金額が高い順', value: 'priceDesc' }
+            { text: '金額が高い順', value: 'priceDesc' },
+            { text: '人気順', value: 'popularity' }  // 人気順の追加
           ],
         };
       },
@@ -295,6 +295,8 @@
             this.products.sort((a, b) => a.price - b.price);
           } else if (newValue === 'priceDesc') {
             this.products.sort((a, b) => b.price - a.price);
+          } else if (newValue === 'popularity') {
+            this.sortByPopularity();  // 人気順のソートを呼び出す
           }
         }
       },
@@ -313,7 +315,7 @@
           window.location.href = 'Favorite.html';
         },
         goCart() {
-          window.location.href = 'Shoplist..html';
+          window.location.href = 'Shoplist.html';
         },
         goToProductDetail(productName) {
           window.location.href = `ItemDetail.html?name=${encodeURIComponent(productName)}`;
@@ -330,12 +332,12 @@
         async searchItems() {
           try {
             const response = await axios.get('https://m3h-minaki-jimoties.azurewebsites.net/api/SearchItemName', {
-              params: { Item_name: this.keyword }
+              params: { Item_name: this.keyword.trim() } // 検索キーワードをトリム
             });
             if (response.data && response.data.ItemTableList && response.data.ItemTableList.length > 0) {
               this.products = response.data.ItemTableList.map(product => ({
                 id: product.Item_ID,
-                name: product.Item_name,
+                name: product.Item_name.trim(), // 商品名をトリム
                 price: product.Item_price || '未設定',
                 image: product.Item_image || 'https://via.placeholder.com/150',  // デフォルト画像
                 region: product.Item_prefecture
@@ -347,6 +349,35 @@
             }
           } catch (error) {
             console.error('検索エラー:', error);
+            this.message = 'エラーが発生しました。再度お試しください。';
+          }
+        },
+
+        async sortByPopularity() {
+          try {
+            const response = await axios.get('https://m3h-minaki-jimoties.azurewebsites.net/api/Ranking');
+            if (response.data && response.data.List && response.data.List.length > 0) {
+              const sortedProducts = response.data.List.map(item => ({
+                name: item.Item_name.trim().toLowerCase(), // 商品名をトリムして小文字に変換
+                totalQuantity: item.Total_quantity
+              }));
+
+              console.log("Sorted Products from API:", sortedProducts); // デバッグ用
+
+              // 商品名が一致しているか確認しつつ、人気順でマッチング
+              this.products = this.products.map(product => {
+                const foundItem = sortedProducts.find(item => item.name === product.name.trim().toLowerCase());
+                return foundItem ? { ...product, totalQuantity: foundItem.totalQuantity } : product;
+              });
+
+              // 売れた個数の降順でソート
+              this.products.sort((a, b) => (b.totalQuantity || 0) - (a.totalQuantity || 0));
+              this.message = '';
+            } else {
+              this.message = '人気順データがありません';
+            }
+          } catch (error) {
+            console.error('人気順ソートエラー:', error);
             this.message = 'エラーが発生しました。再度お試しください。';
           }
         }
