@@ -289,11 +289,19 @@
       background-color: red !important; /* ボタンの背景色を赤に変更 */
       color: white !important; /* ボタンの文字色を白に設定 */
     }
+    .custom-confirm-button {
+        color: white;
+      }
+      .custom-cancel-button{
+        border: 0.5px solid;
+        
+      }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     new Vue({
       el: '#app',
@@ -388,7 +396,13 @@
         async updateItemQuantity(item, quantityChange) {
           const newQuantity = item.Item_num + quantityChange;
           if (newQuantity <= 0) {
-            alert('数量は1以上でなければなりません。');
+            Swal.fire({
+          icon: 'error',
+          title: '1つ以上選択してください',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#d3d3d3',
+          iconColor: '#008000'
+        });
             return;
           }
 
@@ -414,12 +428,34 @@
 
         confirmDelete() {
           if (this.selectedItems.length === 0) {
-            alert('削除するアイテムを選択してください。');
+            Swal.fire({
+          icon: 'warning',
+          title: 'アイテムを選択してください。',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#d3d3d3',
+          iconColor: '#008000'
+        });
             return;
           }
-          if (confirm('選択した商品を削除しますか？')) {
-            this.deleteSelected();
-          }
+          Swal.fire({
+        title: 'お気に入りから削除しますか',
+        showCancelButton: true,
+        icon: 'question',
+        confirmButtonText: 'はい',
+        cancelButtonText: 'いいえ',
+        confirmButtonColor: '#7b9e7a',
+        cancelButtonColor: 'white',
+        iconColor: '#008000',
+        customClass: {
+    confirmButton: 'custom-confirm-button',
+    cancelButton: 'custom-cancel-button'
+  },
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteSelected();
+        }
+      });
         },
 
         async deleteSelected() {
@@ -459,7 +495,12 @@
                 // 削除に成功した場合の処理
                 this.desserts = this.desserts.filter(dessert => dessert.Item_ID !== item.Item_ID);
                 this.desserts = [...this.desserts]; // 画面を更新するために再代入
-                alert(`${item.Item_name}が削除されました。`);
+                Swal.fire({
+          icon: 'success',
+          text: `${item.Item_name}が削除されました。`,
+          timer: 3000, // 3秒後に自動で閉じる
+          showConfirmButton: false
+        });
               } else {
                 console.error(`削除APIは成功しましたが、ステータスが'${result.status}'となっています。`);
                 alert('削除に失敗しました。');
@@ -519,5 +560,3 @@
   </script>
 </body>
 </html>
-
-
