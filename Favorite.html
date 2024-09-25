@@ -166,6 +166,13 @@
       a:hover {
         text-decoration: underline; /* ホバー時に下線を追加 */
       }
+      .custom-confirm-button {
+        color: white;
+      }
+      .custom-cancel-button{
+        border: 0.5px solid;
+        
+      }
     </style>
   </head>
   <body>
@@ -260,6 +267,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.6.12/dist/vuetify.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       new Vue({
         el: '#app',
@@ -282,6 +290,7 @@
             tableKey: 0 // 再描画用のkeyを追加
           };
         },
+        
 
         mounted() {
           this.fetchfavorite();
@@ -337,70 +346,137 @@
 
           confirmDelete() {
             if (this.selectedItems.length === 0) {
-              alert('削除するアイテムを選択してください。');
-              return;
+              Swal.fire({
+          icon: 'warning',
+          title: 'アイテムを選択してください。',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#d3d3d3',
+          iconColor: '#008000'
+        });
+           return;
             }
-            if (confirm('選択した商品を削除しますか？')) {
-              this.deleteSelected();
-            }
+            Swal.fire({
+        title: 'お気に入りから削除しますか？',
+        showCancelButton: true,
+        confirmButtonText: 'はい',
+        cancelButtonText: 'いいえ',
+        confirmButtonColor: '#7b9e7a',
+        cancelButtonColor: 'white',
+        iconColor: '#008000',
+        customClass: {
+    confirmButton: 'custom-confirm-button',
+    cancelButton: 'custom-cancel-button'
+  },
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteSelected();
+        }
+      });
           },
 
           async deleteSelected() {
-            const functionUrl = 'https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItemFavorite';
-            try {
-              console.log('Deleting selected items:', this.selectedItems);
+  const functionUrl = 'https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItemFavorite';
+  try {
+    console.log('Deleting selected items:', this.selectedItems);
 
-              for (let item of this.selectedItems) {
-                const response = await fetch(functionUrl, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    user_ID: this.userID,
-                    Item_ID: item.Item_ID
-                  })
-                });
+    for (let item of this.selectedItems) {
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user_ID: this.userID,
+          Item_ID: item.Item_ID
+        })
+      });
 
-                console.log(`Response status for item ${item.Item_ID}: ${response.status}`);
+      console.log(`Response status for item ${item.Item_ID}: ${response.status}`);
 
-                if (!response.ok) {
-                  const errorText = await response.text();
-                  console.error(`HTTP error! Status: ${response.status}, Text: ${errorText}`);
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`HTTP error! Status: ${response.status}, Text: ${errorText}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-                const result = await response.json();
-                console.log(`Full result for item ${item.Item_ID}:`, result); // レスポンス全体を出力
+      const result = await response.json();
+      console.log(`Full result for item ${item.Item_ID}:`, result); // レスポンス全体を出力
 
-                // ここでresult.Statusが正しく取得できているか確認
-                if (result.status === 'Success') {
-                  // 削除に成功した場合の処理
-                  this.desserts = this.desserts.filter(dessert => dessert.Item_ID !== item.Item_ID);
-                  this.desserts = [...this.desserts]; // 画面を更新するために再代入
-                  alert(`${item.Item_name}が削除されました。`);
-                } else {
-                  console.error(`削除APIは成功しましたが、ステータスが'${result.status}'となっています。`);
-                  alert('削除に失敗しました。');
-                }
-              }
+      // ここでresult.Statusが正しく取得できているか確認
+      if (result.status === 'Success') {
+        // 削除に成功した場合の処理
+        this.desserts = this.desserts.filter(dessert => dessert.Item_ID !== item.Item_ID);
+        this.desserts = [...this.desserts]; // 画面を更新するために再代入
 
-              this.selectedItems = []; // 選択項目をリセット
+        // Swal.fireを使って削除成功のメッセージを表示
+        Swal.fire({
+          icon: 'success',
+          text: `${item.Item_name}が削除されました。`,
+          timer: 2000, // 2秒後に自動で閉じる
+          showConfirmButton: false
+        });
+      } else {
+        console.error(`削除APIは成功しましたが、ステータスが'${result.status}'となっています。`);
 
-            } catch (error) {
-              console.error('削除中にエラーが発生しました:', error);
-              alert('削除中にエラーが発生しました。');
-            }
-          },
+        // Swal.fireを使って削除失敗のメッセージを表示
+        Swal.fire({
+          icon: 'warning',
+          title: '削除失敗',
+          text: '削除に失敗しました。',
+          confirmButtonText: '閉じる'
+        });
+      }
+    }
+
+    this.selectedItems = []; // 選択項目をリセット
+
+  } catch (error) {
+    console.error('削除中にエラーが発生しました:', error);
+
+    // Swal.fireを使ってエラーメッセージを表示
+    Swal.fire({
+      icon: 'error',
+      title: 'エラー',
+      text: '削除中にエラーが発生しました。',
+      confirmButtonText: '閉じる'
+    });
+  }
+},
 
           confirmAdd() {
             if (this.selectedItems.length === 0) {
-              alert('カートに追加するアイテムを選択してください。');
-              return;
+              Swal.fire({
+          icon: 'warning',
+          title: 'アイテムを選択してください。',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#7b9e7a',
+          iconColor: '#008000',
+          customClass: {
+    confirmButton: 'custom-confirm-button'
+  },
+        });
+           return;
             }
-            if (confirm('選択した商品をカートに追加しますか？')) {
-              this.addSelected();
-            }
+            Swal.fire({
+        title: 'カートに追加しますか？',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'はい',
+        cancelButtonText: 'いいえ',
+        confirmButtonColor: '#7b9e7a',
+        cancelButtonColor: 'white',
+        iconColor: '#008000',
+        customClass: {
+    confirmButton: 'custom-confirm-button',
+    cancelButton: 'custom-cancel-button'
+  },
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.addSelected();
+        }
+      });
           },
 
           async addSelected() {
@@ -427,7 +503,12 @@
 
                 const result = await response.json();
                 if (result.Status !== 'Success') {
-                  alert('商品を1個追加しました。');
+                  Swal.fire({
+          icon: 'success',
+          text: `${item.Item_name}を追加しました。`,
+          timer: 2000, // 2秒後に自動で閉じる
+          showConfirmButton: false
+        });
                   return;
                 }
               }
@@ -469,4 +550,3 @@
     </script>
   </body>
   </html>
-
