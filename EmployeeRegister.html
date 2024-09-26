@@ -16,6 +16,7 @@
   <title>商品登録</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.5.10/dist/vuetify.min.css" rel="stylesheet">
   <style>
     body {
@@ -202,9 +203,7 @@
 </v-form>
 
 
-        <v-alert v-if="responseMessage" type="success" color=#a9a9a9>
-          {{ responseMessage }}
-        </v-alert>
+        
       </v-container>
     </v-app>
   </div>
@@ -240,31 +239,49 @@
       },
       methods: {
         async submit() {
-          if (this.$refs.form.validate()) {
-            const payload = {
-              item_name: this.item_name,
-              item_category: this.item_category,
-              item_prefecture: this.item_prefecture,
-              item_price: this.item_price,
-              item_stock: this.item_stock,
-              item_image: this.item_image,
-            };
+  if (this.$refs.form.validate()) {
+    const payload = {
+      item_name: this.item_name,
+      item_category: this.item_category,
+      item_prefecture: this.item_prefecture,
+      item_price: this.item_price,
+      item_stock: this.item_stock,
+      item_image: this.item_image,
+    };
 
-            try {
-              const response = await fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/RegisterItem', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-              });
-              
-              const result = await response.json();
-              this.responseMessage = result.message || '登録が完了しました';
-            } catch (error) {
-              console.error(error);
-              this.responseMessage = '登録に失敗しました';
-            }
-          }
-        },
+    try {
+      const response = await fetch('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/RegisterItem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      // APIレスポンスの構造をログで確認
+      console.log('APIレスポンス:', result);
+
+      Swal.fire({
+        icon: 'success',
+        title: '登録完了',
+        text: `商品ID: ${result.item_ID || '不明'}が登録されました。`, // ここでundefinedをチェック
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#a9a9a9'
+      });
+
+    } catch (error) {
+      console.error(error);
+
+      Swal.fire({
+        icon: 'error',
+        title: '登録失敗',
+        text: '商品を登録できませんでした。再度お試しください。',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#a9a9a9'
+      });
+    }
+  }
+},
         goBack() {
   window.location.href = 'EmployeeMenu.html';
 }
