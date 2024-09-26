@@ -159,17 +159,61 @@
 
             console.log('API呼び出し成功: ', response.data);
             this.searchResults = response.data.ItemTableList || [];
-            console.log('格納成功: ', this.searchResults);
+            
+            // 検索結果が空だった場合
+            if (this.searchResults.length === 0) {
+              Swal.fire({
+                icon: 'warning',
+                title: '商品が見つかりません',
+                text: '指定したIDの商品は存在しません。',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#a9a9a9'
+              });
+            } else {
+              console.log('格納成功: ', this.searchResults);
+            }
           } catch (error) {
             console.error('検索に失敗しました:', error);
+            
             if (error.response) {
               console.error('レスポンスエラー: ', error.response.status, error.response.data);
+              // APIが404エラーを返した場合
+              if (error.response.status === 404) {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'エラー',
+                  text: '指定したIDの商品が見つかりません。IDをご確認ください。',
+                  confirmButtonText: 'OK',
+                  confirmButtonColor: '#a9a9a9'
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'エラー',
+                  text: '検索中にエラーが発生しました。再度お試しください。',
+                  confirmButtonText: 'OK',
+                  confirmButtonColor: '#a9a9a9'
+                });
+              }
             } else if (error.request) {
               console.error('リクエストエラー: 応答がありません。', error.request);
+              Swal.fire({
+                icon: 'error',
+                title: 'ネットワークエラー',
+                text: 'サーバーからの応答がありません。ネットワークを確認してください。',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#a9a9a9'
+              });
             } else {
               console.error('設定エラー: ', error.message);
+              Swal.fire({
+                icon: 'error',
+                title: 'エラー',
+                text: '設定に問題があります。管理者にお問い合わせください。',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#a9a9a9'
+              });
             }
-            console.error('エラーデバッグ情報: ', error.config);
           }
         },
         startEditing(item) {
@@ -177,81 +221,81 @@
           this.editingItem = { ...item }; // 現在の商品情報をコピー
         },
         async saveChanges() {
-  try {
-    console.log('編集保存開始: ', this.editingItem);
-    // APIを呼び出して編集内容を保存
-    const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItem', this.editingItem);
+          try {
+            console.log('編集保存開始: ', this.editingItem);
+            // APIを呼び出して編集内容を保存
+            const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItem', this.editingItem);
 
-    console.log('編集保存成功: ', response.data);
-    
-    // 成功した場合の処理
-    this.searchResults = this.searchResults.map(item =>
-      item.Item_ID === this.editingItem.item_ID ? this.editingItem : item
-    );
-    this.editingItem = null; // 編集モードを終了
+            console.log('編集保存成功: ', response.data);
+            
+            // 成功した場合の処理
+            this.searchResults = this.searchResults.map(item =>
+              item.Item_ID === this.editingItem.item_ID ? this.editingItem : item
+            );
+            this.editingItem = null; // 編集モードを終了
 
-    // SweetAlertで成功メッセージを表示
-    Swal.fire({
-      icon: 'success',
-      title: '編集完了',
-      text: '編集が正常に保存されました。',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#a9a9a9'
-      
-    });
-  } catch (error) {
-    console.error('編集保存に失敗しました:', error);
+            // SweetAlertで成功メッセージを表示
+            Swal.fire({
+              icon: 'success',
+              title: '編集完了',
+              text: '編集が正常に保存されました。',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#a9a9a9'
+            });
+          } catch (error) {
+            console.error('編集保存に失敗しました:', error);
 
-    // SweetAlertでエラーメッセージを表示
-    Swal.fire({
-      icon: 'error',
-      title: '保存失敗',
-      text: '編集内容の保存に失敗しました。再度お試しください。',
-      confirmButtonText: 'OK'
-    });
-  }
-},
+            // SweetAlertでエラーメッセージを表示
+            Swal.fire({
+              icon: 'error',
+              title: '保存失敗',
+              text: '編集内容の保存に失敗しました。再度お試しください。',
+              confirmButtonText: 'OK'
+            });
+          }
+        },
         cancelEditing() {
           // 編集をキャンセルする
           this.editingItem = null;
         },
         async deleteItem(itemId) {
-  try {
-    console.log('削除開始: ', itemId);
-    // APIを呼び出して商品を削除
-    const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItem', { item_ID: itemId });
+          try {
+            console.log('削除開始: ', itemId);
+            // APIを呼び出して商品を削除
+            const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItem', { item_ID: itemId });
 
-    console.log('削除成功: ', response.data);
-    
-    // 削除後の検索結果更新
-    this.searchResults = this.searchResults.filter(item => item.item_ID !== itemId);
+            console.log('削除成功: ', response.data);
+            
+            // 削除後の検索結果更新
+            this.searchResults = this.searchResults.filter(item => item.item_ID !== itemId);
 
-    // SweetAlertで成功メッセージを表示
-    Swal.fire({
-      icon: 'success',
-      title: '削除完了',
-      text: '商品が正常に削除されました。',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#a9a9a9'
-    });
-  } catch (error) {
-    console.error('削除に失敗しました:', error);
+            // SweetAlertで成功メッセージを表示
+            Swal.fire({
+              icon: 'success',
+              title: '削除完了',
+              text: '商品が正常に削除されました。',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#a9a9a9'
+            });
+          } catch (error) {
+            console.error('削除に失敗しました:', error);
 
-    // SweetAlertでエラーメッセージを表示
-    Swal.fire({
-      icon: 'error',
-      title: '削除失敗',
-      text: '商品を削除できませんでした。再度お試しください。',
-      confirmButtonText: 'OK'
-    });
-  }
-},
+            // SweetAlertでエラーメッセージを表示
+            Swal.fire({
+              icon: 'error',
+              title: '削除失敗',
+              text: '商品を削除できませんでした。再度お試しください。',
+              confirmButtonText: 'OK'
+            });
+          }
+        },
         goBack() {
-  window.location.href = 'EmployeeMenu.html';
-}
+          window.location.href = 'EmployeeMenu.html';
+        }
       }
     });
   </script>
+
 </body>
 </html>
 <!-- partial -->
