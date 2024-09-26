@@ -79,8 +79,8 @@
               <v-form v-if="editingItem && editingItem.Item_ID === item.Item_ID" @submit.prevent="saveChanges">
                 <v-text-field v-model="editingItem.Item_price" label="価格" outlined type="number"></v-text-field>
                 <v-text-field v-model="editingItem.Item_stock" label="在庫数" outlined type="number"></v-text-field>
-                <v-btn type="submit" color="grey">保存</v-btn>
-                <v-btn color="grey" @click="cancelEditing">キャンセル</v-btn>
+                <v-btn type="submit" color="grey" class="button">保存</v-btn>
+                <v-btn color="grey" @click="cancelEditing" class="button">キャンセル</v-btn>
               </v-form>
             </v-card>
 
@@ -120,11 +120,17 @@
     .search-field {
       margin-bottom: 20px;
     }
+    
+    .button {
+      margin-bottom: 10px;
+      margin-left: 5px;
+    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2/dist/vuetify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
     new Vue({
@@ -171,38 +177,74 @@
           this.editingItem = { ...item }; // 現在の商品情報をコピー
         },
         async saveChanges() {
-          try {
-            console.log('編集保存開始: ', this.editingItem);
-            // ここでAPIを呼び出して編集内容を保存します
-            const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItem', this.editingItem);
+  try {
+    console.log('編集保存開始: ', this.editingItem);
+    // APIを呼び出して編集内容を保存
+    const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/UpdateItem', this.editingItem);
 
-            console.log('編集保存成功: ', response.data);
-            this.searchResults = this.searchResults.map(item =>
-              item.Item_ID === this.editingItem.item_ID ? this.editingItem : item
-            );
-            this.editingItem = null; // 編集モードを終了
-          } catch (error) {
-            console.error('編集保存に失敗しました:', error);
-          }
-        },
+    console.log('編集保存成功: ', response.data);
+    
+    // 成功した場合の処理
+    this.searchResults = this.searchResults.map(item =>
+      item.Item_ID === this.editingItem.item_ID ? this.editingItem : item
+    );
+    this.editingItem = null; // 編集モードを終了
+
+    // SweetAlertで成功メッセージを表示
+    Swal.fire({
+      icon: 'success',
+      title: '編集完了',
+      text: '編集が正常に保存されました。',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#a9a9a9'
+      
+    });
+  } catch (error) {
+    console.error('編集保存に失敗しました:', error);
+
+    // SweetAlertでエラーメッセージを表示
+    Swal.fire({
+      icon: 'error',
+      title: '保存失敗',
+      text: '編集内容の保存に失敗しました。再度お試しください。',
+      confirmButtonText: 'OK'
+    });
+  }
+},
         cancelEditing() {
           // 編集をキャンセルする
           this.editingItem = null;
         },
         async deleteItem(itemId) {
-          try {
-            console.log('削除開始: ', itemId);
-            // ここでAPIを呼び出して商品を削除します
-            const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItem', { item_ID: itemId });
+  try {
+    console.log('削除開始: ', itemId);
+    // APIを呼び出して商品を削除
+    const response = await axios.post('https://m3h-nishizawa-jimotiesapi.azurewebsites.net/api/DeleteItem', { item_ID: itemId });
 
-            console.log('削除成功: ', response.data);
-            this.searchResults = this.searchResults.filter(item => item.item_ID !== itemId);
-            this.snackbar.message = '削除が成功しました。'; // メッセージを設定
-            this.snackbar.visible = true; // スナックバーを表示
-          } catch (error) {
-            console.error('削除に失敗しました:', error);
-          }
-        },
+    console.log('削除成功: ', response.data);
+    
+    // 削除後の検索結果更新
+    this.searchResults = this.searchResults.filter(item => item.item_ID !== itemId);
+
+    // SweetAlertで成功メッセージを表示
+    Swal.fire({
+      icon: 'success',
+      title: '削除完了',
+      text: '商品が正常に削除されました。',
+      confirmButtonText: 'OK'
+    });
+  } catch (error) {
+    console.error('削除に失敗しました:', error);
+
+    // SweetAlertでエラーメッセージを表示
+    Swal.fire({
+      icon: 'error',
+      title: '削除失敗',
+      text: '商品を削除できませんでした。再度お試しください。',
+      confirmButtonText: 'OK'
+    });
+  }
+},
         goBack() {
   window.location.href = 'EmployeeMenu.html';
 }
